@@ -15,23 +15,23 @@ const CreateAdmin = async (req, res, next) => {
       return next(new AppErr(result.errors[0].msg, 403));
     }
 
-    let { name, Email, Number, Password } = req.body;
+    let { name, email, number, password } = req.body;
     //---------------Check Email -------------------//
-    let EmailFound = await AdminModel.find({ Email: Email });
+    let EmailFound = await AdminModel.find({ Email: email });
     if (EmailFound.length > 0) {
       return next(new AppErr("Email Already Exists", 402));
     }
     //---------------Check Number ------------------//
-    let NumberFound = await AdminModel.find({ Number: Number });
+    let NumberFound = await AdminModel.find({ Number: number });
     if (NumberFound.length > 0) {
       return next(new AppErr("Number Already Exists", 402));
     }
     //----------------Hash Password ----------------//
     const salt = bcrypt.genSaltSync(15);
-    const hash = bcrypt.hashSync(Password, salt);
+    const hash = bcrypt.hashSync(password, salt);
 
     //------------Add Hash Password -------------//
-    req.body.Password = hash;
+    req.body.password = hash;
     req.body.activate = true;
 
     
@@ -250,16 +250,16 @@ const LoginAdmin = async (req, res, next) => {
     if (!result.isEmpty()) {
       return next(new AppErr(result.errors[0].msg, 403));
     }
-    let { Email, Password } = req.body;
+    let { Email, password } = req.body;
     //---------Find Admin --------------//
 
     let admin = await AdminModel.find({ Email: Email });
     if (!admin) {
       return next(new AppErr("Admin not found", 404));
     }
-
+  console.log(admin)
     //--------------Check Password -------------//
-    let PasswordCheck = bcrypt.compareSync(Password, admin.Password);
+    let PasswordCheck = bcrypt.compareSync(password, admin[0].password);
     if (!PasswordCheck) {
       return next(new AppErr("Invalid Password", 404));
     }

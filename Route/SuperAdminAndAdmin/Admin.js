@@ -17,17 +17,17 @@ const AdminRouter = express.Router();
 AdminRouter.post(
   "/create/admin",
   body("name").notEmpty().withMessage("Name is required"),
-  body("Email")
+  body("email")
     .notEmpty()
     .withMessage("Email is required")
     .isEmail()
     .withMessage("Email must Be a Valied"),
-  body("Number")
+  body("number")
     .notEmpty()
     .withMessage("Number is required")
     .isLength({ min: 10, max: 10 })
     .withMessage("Numbe must be 10 digit"),
-  body("Password").notEmpty().withMessage("Password is required"),
+  body("password").notEmpty().withMessage("Password is required"),
   IsSuperAdmin,
   CreateAdmin
 );
@@ -76,7 +76,7 @@ AdminRouter.post(
     .withMessage("Email is required")
     .isEmail()
     .withMessage("Email must Be a Valied"),
-  body("Password").notEmpty().withMessage("Password is required"),
+  body("password").notEmpty().withMessage("Password is required"),
   LoginAdmin
 );
 
