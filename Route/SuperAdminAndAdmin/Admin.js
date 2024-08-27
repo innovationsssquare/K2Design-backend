@@ -71,7 +71,7 @@ AdminRouter.get("/getsingle/admin/:id",GetSingleAdmin);
 //-------------Login Admin -----------------//
 AdminRouter.post(
   "/login/Admin",
-  body("Email")
+  body("email")
     .notEmpty()
     .withMessage("Email is required")
     .isEmail()
