@@ -139,10 +139,9 @@ const getCategoryHierarchy = async (req, res, next) => {
 };
 
 const UploadCategory = async (req, res, next) => {
-  console.log(req.params.id); // This will log the ID passed in the URL path
   try {
     // Find the category by ID
-    const category = await Category.findById(req.params.id);
+    const category = await Category.findByIdAndUpdate(req.params.id);
     if (!category) {
       return next(new AppErr('Category not found', 404));
     }

@@ -4,7 +4,6 @@ const AppErr = require("../Services/AppErr");
 const VerifyToken = require("../Services/Jwt/VerifyToken");
 
 const IsSuperOrAdmin = async (req, res, next) => {
-  console.log("IsSuperOrAdmin middleware hit");
 
   try {
     let { token } = req.headers;

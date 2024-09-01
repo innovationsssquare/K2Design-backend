@@ -43,7 +43,7 @@ CategoryRouter.delete("/delete/category/:id", IsSuperOrAdmin, deleteCategory);
 
 CategoryRouter.get("/get/allcategorybyslug", getCategoryHierarchy);
 
-CategoryRouter.patch('/upload/category-image/:id', upload.single('image'), UploadCategory);
+CategoryRouter.patch('/upload/category-image/:id', upload.single('image'),IsSuperOrAdmin, UploadCategory);
 
 
 

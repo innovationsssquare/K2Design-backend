@@ -135,7 +135,7 @@ const deleteProduct = async (req, res, next) => {
   
   const UploadProduct= async (req,res,next)=>{
     try {
-      const product = await Product.findById(req.params.id);
+      const product = await Product.findByIdAndUpdate(req.params.id);
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
       }

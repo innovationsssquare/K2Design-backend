@@ -48,6 +48,6 @@ ProductRouter.put(
 
 // Delete Product
 ProductRouter.delete("/delete/product/:id", IsSuperOrAdmin, deleteProduct);
-ProductRouter.post("/upload/product-image/:id", upload.array("images", 5), IsSuperOrAdmin, UploadProduct);
+ProductRouter.patch("/upload/product-image/:id", upload.array("images", 5), IsSuperOrAdmin, UploadProduct);
 
 module.exports ={ ProductRouter};
