@@ -147,11 +147,43 @@ const deleteSubcategory = async (req, res, next) => {
   }
 };
 
+
+const   UploadSubCategory= async (req, res, next) => {
+  try {
+    // Find the category by ID
+    const category = await Subcategory.findByIdAndUpdate(req.params.id);
+    if (!category) {
+      return next(new AppErr('Category not found', 404));
+    }
+
+    // Check if an image was uploaded
+    if (!req.file) {
+      return next(new AppErr('No image file provided', 400));
+    }
+
+    // Update the category with the image URL from Cloudinary
+    category.image = req.file.path; // Cloudinary URL is stored in `req.file.path`
+    await category.save();
+
+    return res.status(200).json({
+      status: true,
+      statuscode: 200,
+      message: 'Category image uploaded successfully',
+      data: category,
+    });
+  } catch (error) {
+    return next(new AppErr(error.message, 500));
+  }
+};
+
+
+
   
 module.exports = {
   createSubcategory,
   getAllSubcategories,
   getSubcategoryById,
   updateSubcategory,
-  deleteSubcategory
+  deleteSubcategory,
+  UploadSubCategory
 };

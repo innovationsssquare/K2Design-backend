@@ -1,13 +1,15 @@
 const express = require("express");
 const { IsSuperOrAdmin } = require("../MiddleWare/isSuperOrAdmin"); 
 const { body } = require("express-validator");
+const upload =require("../Services/multer")
 
 const {
   createSubcategory,
   getAllSubcategories,
   getSubcategoryById,
   updateSubcategory,
-  deleteSubcategory
+  deleteSubcategory,
+  UploadSubCategory
 } = require("../Controller/Subcategory");
 
 
@@ -39,5 +41,7 @@ SubcategoryRouter.put(
 
 // Delete Subcategory
 SubcategoryRouter.delete("/delete/subcategory/:id", IsSuperOrAdmin, deleteSubcategory);
+SubcategoryRouter.patch('/upload/Subcategory-image/:id', upload.single('image'),IsSuperOrAdmin, UploadSubCategory);
+
 
 module.exports = {SubcategoryRouter};
