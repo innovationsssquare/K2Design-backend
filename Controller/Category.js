@@ -40,7 +40,7 @@ const createCategory = async (req, res, next) => {
 // Get all categories
 const getAllCategories = async (req, res, next) => {
   try {
-    const categories = await Category.find();
+    const categories = await Category.find().populate("subcategories");
     return res.status(200).json({
       status: true,
       statuscode: 200,
