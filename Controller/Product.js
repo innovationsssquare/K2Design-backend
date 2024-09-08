@@ -4,7 +4,7 @@ const Subcategory = require('../Model/Subcategories');
 
 const createProduct = async (req, res, next) => {
   try {
-    const { name, subcategoryId, price, sku, description, images } = req.body;
+    const { name, subcategoryId, price, sku, description, images,variants  } = req.body;
 
     // Validate subcategory existence
     const subcategory = await Subcategory.findById(subcategoryId);
@@ -26,6 +26,7 @@ const createProduct = async (req, res, next) => {
       sku,
       description,
       images,
+      variants,
     });
 
     await newProduct.save();
