@@ -12,6 +12,7 @@ const { AdminRouter } = require("./Route/SuperAdminAndAdmin/Admin");
 const {CategoryRouter}=require("./Route/Category")
 const {ProductRouter}=require("./Route/Product")
 const {SubcategoryRouter}=require("./Route/Subcategory")
+const {BranchRouter}=require("./Route/Branch")
 // const cloudinary = require("cloudinary");
 const UserRouter = require("./Route/Users");
 
@@ -43,6 +44,7 @@ app.use("/api/v1/users", UserRouter);
 app.use("/api/v1/category", CategoryRouter);
 app.use("/api/v1/Subcategory", SubcategoryRouter);
 app.use("/api/v1/product", ProductRouter);
+app.use("/api/v1/branch", BranchRouter);
 
 
 //--------------Not Found Route-------------------//
