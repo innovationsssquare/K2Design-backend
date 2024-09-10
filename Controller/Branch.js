@@ -9,6 +9,7 @@ const Api = new Methods();
 //-----------------------Create a new Branch--------------------------------//
 
 const CreateBranch = async (req, res, next) => {
+  console.log(req.body)
   try {
     //--------Validation Check--------------//
     const result = validationResult(req);

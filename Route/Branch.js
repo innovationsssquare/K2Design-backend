@@ -13,14 +13,14 @@ const BranchRouter = express.Router();
 
 BranchRouter.post(
   "/create/branch",
-  body("Branchname").notEmpty().withMessage("Branch Name  is required"),
+  body("branchName").notEmpty().withMessage("Branch Name  is required"),
   body("code").notEmpty().withMessage("Branch Code  is required"),
   IsSuperAdmin,
   CreateBranch
 );
 BranchRouter.put(
   "/update/branch/:id",
-  body("Branchname").notEmpty().withMessage("Branch Name  is required"),
+  body("branchName").notEmpty().withMessage("Branch Name  is required"),
   body("code").notEmpty().withMessage("Branch Code  is required"),
   IsSuperAdmin,
   UpdateBranch
