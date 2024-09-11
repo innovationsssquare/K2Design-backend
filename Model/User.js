@@ -12,37 +12,14 @@ const UserSchema = new mongoose.Schema(
     Email: {
       type: String,
     },
-    UserId: {
-      type: String,
-      required: true,
-    },
     UserNumber: {
       type: Number,
       required: true,
     },
-    BookedDate: {
-      type: Date,
-      required: true,
-    },
-    StartDate: {
-      type: String,
-      required: true,
-    },
-    LastDate: {
-      type: String,
-      required: true,
-    },
-    Status: {
-      type: String,
-      required: true,
-    },
-    devicetoken: {
-      type: String
-    }
   },
   { timestamps: true }
 );
 
-const UserModel = mongoose.model("teantants", UserSchema);
+const UserModel = mongoose.model("Customer", UserSchema);
 
 module.exports = UserModel;

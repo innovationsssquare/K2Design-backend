@@ -13,8 +13,8 @@ const {CategoryRouter}=require("./Route/Category")
 const {ProductRouter}=require("./Route/Product")
 const {SubcategoryRouter}=require("./Route/Subcategory")
 const {BranchRouter}=require("./Route/Branch")
-// const cloudinary = require("cloudinary");
-const UserRouter = require("./Route/Users");
+const {UserRouter}=require("./Route/Users")
+const {OrderRouter}=require("./Route/Order")
 
 
 const app = express();
@@ -30,12 +30,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-//-------------Cloudinary---------------//
-// cloudinary.config({
-//   cloud_name:process.env.CLOUD_NAME,
-//   api_key:process.env.CLOUDNARY_API_KEY,
-//   api_secret:process.env.CLOUDNARY_API_SECRET,
-// });
+
 
 //--------------- Route Middleware ------------------//
 app.use("/api/v1/SuperAdmin", SuperAdminRouter);
@@ -45,6 +40,7 @@ app.use("/api/v1/category", CategoryRouter);
 app.use("/api/v1/Subcategory", SubcategoryRouter);
 app.use("/api/v1/product", ProductRouter);
 app.use("/api/v1/branch", BranchRouter);
+app.use("/api/v1/Order", OrderRouter);
 
 
 //--------------Not Found Route-------------------//
