@@ -209,18 +209,25 @@ const ToggleActiveAdmin = async (req, res, next) => {
 const GetAllAdmin = async (req, res, next) => {
   try {
     let { branchid } = req.params;
+    console.log(req.params);
+    
+    // Fetch all admins
     let admin = await AdminModel.find();
-    let filterdata = admin.filter((branch) => branch.branch.includes(branchid));
+    
+    // Filter admins by the branch ID
+    let filterdata = admin.filter((branch) => branch.branch.toString() === branchid);
+    
     return res.status(200).json({
       status: true,
       statuscode: 200,
-      message: "Admin fetched successfully ",
+      message: "Admin fetched successfully",
       data: filterdata,
     });
   } catch (error) {
     return next(new AppErr(error.message, 500));
   }
 };
+
 
 //-------------------Get Single Admin -------------------//
 

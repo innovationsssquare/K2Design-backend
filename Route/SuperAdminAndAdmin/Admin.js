@@ -63,7 +63,7 @@ AdminRouter.put(
 AdminRouter.put("/update/active/admin/:id", IsSuperAdmin, ToggleActiveAdmin);
 
 //-------------Get All Admin ---------------//
-AdminRouter.get("/get/admin/:branchid", IsSuperAdmin, GetAllAdmin);
+AdminRouter.get("/get/admin/:branchid", GetAllAdmin);
 
 //-------------Get All Admin ---------------//
 AdminRouter.get("/getsingle/admin/:id",GetSingleAdmin);
