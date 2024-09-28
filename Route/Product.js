@@ -17,6 +17,7 @@ const ProductRouter = express.Router();
 // Create Product
 ProductRouter.post(
   "/create/product",
+  upload.array("images", 6),
   body("name").notEmpty().withMessage("Product name is required"),
   body("subcategoryId").notEmpty().withMessage("Subcategory ID is required"),
   body("price").isNumeric().withMessage("Price must be a number"),
