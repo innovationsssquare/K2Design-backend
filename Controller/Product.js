@@ -162,6 +162,29 @@ const UploadProduct = async (req, res, next) => {
   }
 };
 
+// Get Products by Subcategory ID
+const getProductsBySubcategory = async (req, res, next) => {
+  try {
+    const { subcategoryId } = req.params;
+
+    // Fetch products that belong to the specified subcategory
+    const products = await Product.find({ subcategoryId }).populate("subcategoryId");
+
+    if (products.length === 0) {
+      return next(new AppErr("No products found for this subcategory", 404));
+    }
+
+    return res.status(200).json({
+      status: true,
+      statuscode: 200,
+      data: products,
+    });
+  } catch (error) {
+    return next(new AppErr(error.message, 500));
+  }
+};
+
+
 module.exports = {
   createProduct,
   deleteProduct,
@@ -169,4 +192,5 @@ module.exports = {
   getProductById,
   updateProduct,
   UploadProduct,
+  getProductsBySubcategory
 };

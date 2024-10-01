@@ -9,7 +9,8 @@ const {
   getProductById,
   updateProduct,
   deleteProduct,
-  UploadProduct
+  UploadProduct,
+  getProductsBySubcategory
 } = require("../Controller/Product");
 
 const ProductRouter = express.Router();
@@ -50,5 +51,7 @@ ProductRouter.put(
 // Delete Product
 ProductRouter.delete("/delete/product/:id", IsSuperOrAdmin, deleteProduct);
 ProductRouter.patch("/upload/product-image/:id", upload.array("images", 5), IsSuperOrAdmin, UploadProduct);
+// ProductRouter.js
+ProductRouter.get("/getsubcategoryproducts/:subcategoryId", getProductsBySubcategory);
 
 module.exports ={ ProductRouter};
