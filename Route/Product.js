@@ -52,6 +52,6 @@ ProductRouter.put(
 ProductRouter.delete("/delete/product/:id", IsSuperOrAdmin, deleteProduct);
 ProductRouter.patch("/upload/product-image/:id", upload.array("images", 5), IsSuperOrAdmin, UploadProduct);
 // ProductRouter.js
-ProductRouter.get("/getsubcategoryproducts/:subcategoryId", getProductsBySubcategory);
+ProductRouter.get("/getsubcategoryproducts/:slug", getProductsBySubcategory);
 
 module.exports ={ ProductRouter};

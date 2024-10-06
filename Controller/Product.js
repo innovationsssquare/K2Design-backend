@@ -163,26 +163,53 @@ const UploadProduct = async (req, res, next) => {
 };
 
 // Get Products by Subcategory ID
+// const getProductsBySubcategory = async (req, res, next) => {
+//   try {
+//     const { subcategoryId } = req.params;
+
+//     // Fetch products that belong to the specified subcategory
+//     const products = await Product.find({ subcategoryId }).populate("subcategoryId");
+
+//     if (products.length === 0) {
+//       return next(new AppErr("No products found for this subcategory", 404));
+//     }
+
+//     return res.status(200).json({
+//       status: true,
+//       statuscode: 200,
+//       data: products,
+//     });
+//   } catch (error) {
+//     return next(new AppErr(error.message, 500));
+//   }
+// };
+
 const getProductsBySubcategory = async (req, res, next) => {
   try {
-    const { subcategoryId } = req.params;
+    const { slug } = req.params;
 
-    // Fetch products that belong to the specified subcategory
-    const products = await Product.find({ subcategoryId }).populate("subcategoryId");
+    // Find the subcategory by its slug and populate the products array
+    const subcategory = await Subcategory.findOne({ slug }).populate('products');
 
-    if (products.length === 0) {
+    if (!subcategory) {
+      return next(new AppErr("Subcategory not found", 404));
+    }
+
+    if (subcategory.products.length === 0) {
       return next(new AppErr("No products found for this subcategory", 404));
     }
 
     return res.status(200).json({
       status: true,
       statuscode: 200,
-      data: products,
+      data: subcategory.products,
     });
   } catch (error) {
     return next(new AppErr(error.message, 500));
   }
 };
+
+
 
 
 module.exports = {
