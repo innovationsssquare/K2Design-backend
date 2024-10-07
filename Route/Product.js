@@ -10,7 +10,8 @@ const {
   updateProduct,
   deleteProduct,
   UploadProduct,
-  getProductsBySubcategory
+  getProductsBySubcategory,
+  getProductBySlug
 } = require("../Controller/Product");
 
 const ProductRouter = express.Router();
@@ -34,6 +35,7 @@ ProductRouter.get("/get/products", getAllProducts);
 
 // Get Single Product by ID
 ProductRouter.get("/get/product/:id", getProductById);
+ProductRouter.get("/get/productbyslug/:subcategorySlug/:productSlug", getProductBySlug);
 
 // Update Product
 ProductRouter.put(

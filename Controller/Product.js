@@ -209,6 +209,38 @@ const getProductsBySubcategory = async (req, res, next) => {
   }
 };
 
+const getProductBySlug = async (req, res, next) => {
+  try {
+    const { subcategorySlug, productSlug } = req.params;
+    console.log(req.params)
+
+    // Find the subcategory by its slug to ensure the context of the product
+    const subcategory = await Subcategory.findOne({ slug: subcategorySlug }).populate('products');
+
+    if (!subcategory) {
+      return next(new AppErr("Subcategory not found", 404));
+    }
+
+    // Find the product in the subcategory's products array by its slug
+    const product = await Product.findOne({
+      _id: { $in: subcategory.products },
+      slug: productSlug,
+    }).populate("subcategoryId");
+
+    if (!product) {
+      return next(new AppErr("Product not found in this subcategory", 404));
+    }
+
+    return res.status(200).json({
+      status: true,
+      statuscode: 200,
+      data: product,
+    });
+  } catch (error) {
+    return next(new AppErr(error.message, 500));
+  }
+};
+
 
 
 
@@ -219,5 +251,6 @@ module.exports = {
   getProductById,
   updateProduct,
   UploadProduct,
-  getProductsBySubcategory
+  getProductsBySubcategory,
+  getProductBySlug
 };
