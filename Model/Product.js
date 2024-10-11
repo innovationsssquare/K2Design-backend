@@ -4,8 +4,8 @@ const slugify = require('slugify');
 
 // Define a schema for product variants
 const VariantSchema = new Schema({
-  variantName: { type: String, required: true }, // e.g., "Size" or "Color"
-  variantValue: { type: String, required: true }, // e.g., "Small", "Large", "Red", "Blue"
+  variantName: { type: String}, // e.g., "Size" or "Color"
+  variantValue: { type: String }, // e.g., "Small", "Large", "Red", "Blue"
   additionalPrice: { type: Number, default: 0 }, // Any price adjustment for this variant
 });
 

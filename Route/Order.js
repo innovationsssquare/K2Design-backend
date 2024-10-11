@@ -10,7 +10,7 @@ const {
 
 const OrderRouter = express.Router();
 
-OrderRouter.post("/order/create", IsSuperOrAdmin, createOrder);
+OrderRouter.post("/order/create", createOrder);
 
 OrderRouter.get("/order/getall", IsSuperOrAdmin, getAllOrders);
 

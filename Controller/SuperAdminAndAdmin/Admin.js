@@ -257,10 +257,10 @@ const LoginAdmin = async (req, res, next) => {
     if (!result.isEmpty()) {
       return next(new AppErr(result.errors[0].msg, 403));
     }
-    let { Email, password } = req.body;
+    let { email, password } = req.body;
     //---------Find Admin --------------//
 
-    let admin = await AdminModel.find({ Email: Email });
+    let admin = await AdminModel.find({ email: email });
     if (!admin) {
       return next(new AppErr("Admin not found", 404));
     }

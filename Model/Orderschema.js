@@ -42,18 +42,6 @@ const OrderSchema = new mongoose.Schema(
             required: true,
           },
         },
-        visitingCard: {
-          name: {
-            type: String,
-          },
-          design: {
-            type: String,
-          },
-          additionalCost: {
-            type: Number,
-            default: 0,
-          },
-        },
       },
     ],
     admin: {
@@ -70,6 +58,9 @@ const OrderSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Customer', 
       required: true,
+    },
+    invoiceUrl: {
+      type: String, 
     },
     status: {
       type: String,
