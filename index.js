@@ -23,9 +23,7 @@ const app = express();
 const httpServer = createServer(app);
 initSocket(httpServer)
 
-app.use(
-  cors()
-);
+app.use(cors());
 
 // io.on("connection", (socket) => {
 //   console.log("User Connected", socket.id);

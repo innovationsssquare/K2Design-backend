@@ -21,7 +21,7 @@ const IsSuperOrAdmin = async (req, res, next) => {
       return next(new AppErr("Super Admin Or Admin not found", 404));
     }
 
-    if (superadmin && superadmin.blocked) {
+    if (!superadmin) {
       return next(new AppErr("You Dont't Have Permission", 404));
     }
 
