@@ -15,16 +15,41 @@ const {SubcategoryRouter}=require("./Route/Subcategory")
 const {BranchRouter}=require("./Route/Branch")
 const {UserRouter}=require("./Route/Users")
 const {OrderRouter}=require("./Route/Order")
-
+const { createServer } = require("http");
+const { Server }= require("socket.io");
+const {initSocket}=require("./Services/Socket")
 
 const app = express();
+const httpServer = createServer(app);
+initSocket(httpServer)
 
+app.use(
+  cors()
+);
+
+// io.on("connection", (socket) => {
+//   console.log("User Connected", socket.id);
+
+//   socket.on("message", ({ room, message }) => {
+//     console.log({ room, message });
+//     socket.to(room).emit("receive-message", message);
+//   });
+
+//   socket.on("join-room", (room) => {
+//     socket.join(room);
+//     console.log(`User joined room ${room}`);
+//   });
+
+//   socket.on("disconnect", () => {
+//     console.log("User Disconnected", socket.id);
+//   });
+// });
 
 
 //------IN Build Middleware----------//
 app.use(morgan("combined"));
 app.use(helmet());
-app.use(cors());
+// app.use(cors());
 app.use(mongosantize());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -48,11 +73,14 @@ app.get("*", (req, res, next) => {
   return next(new AppErr("Route not found", 404));
 });
 
+
+
+
 //----------Global Error -----------//
 app.use(globalErrHandler);
 
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   DbConnection();
-  console.log(`listening on ${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });

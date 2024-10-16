@@ -6,6 +6,8 @@ const {
   getAllOrders,
   getOrderById,
   updateOrderById,
+  markOrderAsRead,
+  markAllOrdersAsRead
 } = require("../Controller/Order");
 
 const OrderRouter = express.Router();
@@ -19,5 +21,9 @@ OrderRouter.get("/order/getorder/:id", IsSuperOrAdmin, getOrderById);
 OrderRouter.put("/order/update/:id", IsSuperOrAdmin, updateOrderById);
 
 OrderRouter.delete("/order/delete/:id", IsSuperOrAdmin, deleteOrderById);
+
+OrderRouter.put("/order/mark-as-read/:orderId", markOrderAsRead);
+
+OrderRouter.patch("/order/mark-all-as-read", markAllOrdersAsRead);
 
 module.exports = { OrderRouter };

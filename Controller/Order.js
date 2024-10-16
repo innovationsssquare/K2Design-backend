@@ -7,20 +7,33 @@ const cloudinary = require("../Services/cloudinary");
 const upload = require("../Services/multer"); // Multer setup for image uploads
 const puppeteer = require("puppeteer");
 const pdf = require('html-pdf-node');
+const { getSocketIO } = require("../Services/Socket");
+
 
 // Create a new order
 const createOrder = async (req, res, next) => {
   try {
     const { products, admin, branch, status, details, user } = req.body;
+    
+    const generateOrderId = () => {
+      const timestamp = Date.now(); // Current time in milliseconds
+      const randomNum = Math.floor(Math.random() * 1000000); // A random 6-digit number
+      return `#ORD-${timestamp}-${randomNum}`;
+    };
+
+    const orderId = generateOrderId();
+
 
     // Create the new order
     const newOrder = new OrderModel({
+      orderId,
       products,
       admin,
       branch,
       status,
       details,
       user,
+      isRead: false,
     });
 
     const savedOrder = await newOrder.save();
@@ -51,9 +64,11 @@ const createOrder = async (req, res, next) => {
     await savedOrder.save();
 
     // Emit order creation event via Socket.IO (if using)
-    if (req.io) {
-      req.io.emit("orderCreated", savedOrder);
-    }
+    const io = getSocketIO();
+    io.emit("orderCreated", {
+      message: "A new order has been created!",
+      order: savedOrder
+    });
 
     // Respond with the created order
     res.status(201).json({
@@ -238,6 +253,7 @@ const calculateTotalPrice = (products) => {
 const getAllOrders = async (req, res, next) => {
   try {
     const orders = await OrderModel.find()
+      .populate("user")
       .populate("products")
       .populate("admin")
       .populate("branch");
@@ -298,10 +314,70 @@ const deleteOrderById = async (req, res, next) => {
   }
 };
 
+
+
+// Mark an order as read
+const markOrderAsRead = async (req, res, next) => {
+  try {
+    const { orderId } = req.params;
+
+    const order = await OrderModel.findByIdAndUpdate(
+      orderId,
+      { isRead: true },
+      { new: true }
+    );
+
+    if (!order) {
+      return next(new AppErr("Order not found", 404));
+    }
+
+    res.status(200).json({
+      status: true,
+      message: "Order marked as read",
+      data: order,
+    });
+  } catch (error) {
+    next(new AppErr(error.message, 500));
+  }
+};
+
+// Get unread orders count
+const getUnreadOrdersCount = async (req, res, next) => {
+  try {
+    const unreadOrdersCount = await OrderModel.countDocuments({ isRead: false });
+    res.status(200).json({
+      status: true,
+      data: unreadOrdersCount,
+    });
+  } catch (error) {
+    next(new AppErr(error.message, 500));
+  }
+};
+
+
+// Mark all orders as read
+const markAllOrdersAsRead = async (req, res, next) => {
+  try {
+    // Update all orders to set isRead to true
+    await OrderModel.updateMany({}, { isRead: true });
+
+    res.status(200).json({
+      status: true,
+      message: "All orders have been marked as read.",
+    });
+  } catch (error) {
+    next(new AppErr(error.message, 500));
+  }
+};
+
+
 module.exports = {
   createOrder,
   getAllOrders,
   getOrderById,
   updateOrderById,
   deleteOrderById,
+  markOrderAsRead,
+  getUnreadOrdersCount,
+  markAllOrdersAsRead
 };

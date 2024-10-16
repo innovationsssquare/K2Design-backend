@@ -25,7 +25,7 @@ const IsSuperOrAdmin = async (req, res, next) => {
       return next(new AppErr("You Dont't Have Permission", 404));
     }
 
-    if (admin && !admin.activate) {
+    if (!admin) {
       return next(new AppErr("You Dont't Have Permission", 404));
     }
 

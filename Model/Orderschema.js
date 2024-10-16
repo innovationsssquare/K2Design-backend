@@ -62,6 +62,13 @@ const OrderSchema = new mongoose.Schema(
     invoiceUrl: {
       type: String, 
     },
+    orderId: {
+      type: String, 
+    },
+    isRead: {
+      type: Boolean,
+      default: false, 
+    },
     status: {
       type: String,
       enum: ['pending', 'completed', 'canceled'],
