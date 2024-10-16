@@ -14,7 +14,7 @@ const OrderRouter = express.Router();
 
 OrderRouter.post("/order/create", createOrder);
 
-OrderRouter.get("/order/getall", IsSuperOrAdmin, getAllOrders);
+OrderRouter.get("/order/getall", getAllOrders);
 
 OrderRouter.get("/order/getorder/:id", IsSuperOrAdmin, getOrderById);
 

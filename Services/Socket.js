@@ -6,7 +6,7 @@ let io;
 function initSocket(server) {
   io = socketIO(server, {
     cors: {
-      origin: "*", // Replace with your frontend URL in production
+      origin: "https://k2-design-dashboard.vercel.app", // Replace with your frontend URL in production
       methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
       credentials: true,
     },
