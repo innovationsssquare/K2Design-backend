@@ -26,7 +26,7 @@ ProductRouter.post(
   body("sku").notEmpty().withMessage("SKU is required"),
   body("description").optional(),
   body("images").isArray().withMessage("Images should be an array of URLs").optional(),
-  IsSuperOrAdmin,
+  // IsSuperOrAdmin,
   createProduct
 );
 

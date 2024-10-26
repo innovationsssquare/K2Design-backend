@@ -1,20 +1,75 @@
 const Product = require("../Model/Product");
 const AppErr = require("../Services/AppErr");
 const Subcategory = require("../Model/Subcategories");
+const { json } = require("body-parser");
 
 const createProduct = async (req, res, next) => {
+  console.log(req.body)
   try {
-    const { name, subcategoryId, price, sku, description, images, variants } =
-      req.body;
+    const {
+      name,
+      subcategoryId,
+      price,
+      sku,
+      description,
+      variants,
+      customizations,
+      availableQuantities, // Array of quantities to offer for the product
+      qty,
+    } = req.body;
 
-      if (variants && Array.isArray(variants)) {
-        for (const variant of variants) {
-          if (!variant.variantName || !variant.variantValue) {
-            return next(new AppErr('All variants must have a name and value.', 400));
-          }
+
+    let parsedVariants = Array.isArray(variants) ? variants : JSON.parse(variants);
+    let parsedCustomizations = Array.isArray(customizations) ? customizations : JSON.parse(customizations);
+
+    console.log("Parsed Customizations:", JSON.stringify(parsedCustomizations, null, 2));
+
+    // Validate customizations and parse options
+    if (!Array.isArray(parsedCustomizations)) {
+      throw new AppErr("Customizations should be an array of objects", 400);
+    }
+
+    parsedCustomizations = parsedCustomizations.map((customization) => {
+      // Ensure options is an array
+      if (customization.options && typeof customization.options === 'string') {
+        customization.options = JSON.parse(customization.options); // Convert if it's a string
+      }
+
+      if (!Array.isArray(customization.options)) {
+        throw new AppErr("Options must be an array", 400);
+      }
+
+      // Map each option to ensure it has label and rate
+      customization.options = customization.options.map(option => {
+        if (!option.label || option.rate === undefined) {
+          throw new AppErr("Each option must have a label and rate", 400);
+        }
+        return {
+          label: option.label, // Extract label
+          rate: option.rate,   // Extract rate
+        };
+      });
+
+      // Validate the customization fields
+      if (!customization.fieldName || !customization.fieldType) {
+        throw new AppErr("Each customization must have a field name and type", 400);
+      }
+
+      return customization;
+    });
+
+
+    if (variants && Array.isArray(variants)) {
+      for (const variant of variants) {
+        if (!variant.variantName || !variant.variantValue) {
+          return next(
+            new AppErr("All variants must have a name and value.", 400)
+          );
         }
       }
-  
+    }
+
+   
 
     // Validate subcategory existence
     const subcategory = await Subcategory.findById(subcategoryId);
@@ -28,7 +83,14 @@ const createProduct = async (req, res, next) => {
       return next(new AppErr("Product with this SKU already exists", 400));
     }
 
-    const imageUrls = req.files.map((file) => file.path);
+   
+    if (availableQuantities && availableQuantities.length > 0) {
+      if (!availableQuantities.includes(qty)) {
+        return next(new AppErr("Invalid quantity selected for this product", 400));
+      }
+    }
+
+    // const imageUrls = req.files.map((file) => file.path);
 
     // Create product
     const newProduct = new Product({
@@ -37,8 +99,11 @@ const createProduct = async (req, res, next) => {
       price,
       sku,
       description,
-      images: imageUrls,
+      // images: imageUrls,
       variants: JSON.parse(variants),
+      customizations:parsedCustomizations,  // Save customizations
+      qty: qty,
+      availableQuantities: availableQuantities || [] 
     });
 
     await newProduct.save();
@@ -189,7 +254,9 @@ const getProductsBySubcategory = async (req, res, next) => {
     const { slug } = req.params;
 
     // Find the subcategory by its slug and populate the products array
-    const subcategory = await Subcategory.findOne({ slug }).populate('products');
+    const subcategory = await Subcategory.findOne({ slug }).populate(
+      "products"
+    );
 
     if (!subcategory) {
       return next(new AppErr("Subcategory not found", 404));
@@ -212,10 +279,12 @@ const getProductsBySubcategory = async (req, res, next) => {
 const getProductBySlug = async (req, res, next) => {
   try {
     const { subcategorySlug, productSlug } = req.params;
-    console.log(req.params)
+    console.log(req.params);
 
     // Find the subcategory by its slug to ensure the context of the product
-    const subcategory = await Subcategory.findOne({ slug: subcategorySlug }).populate('products');
+    const subcategory = await Subcategory.findOne({
+      slug: subcategorySlug,
+    }).populate("products");
 
     if (!subcategory) {
       return next(new AppErr("Subcategory not found", 404));
@@ -241,9 +310,6 @@ const getProductBySlug = async (req, res, next) => {
   }
 };
 
-
-
-
 module.exports = {
   createProduct,
   deleteProduct,
@@ -252,5 +318,5 @@ module.exports = {
   updateProduct,
   UploadProduct,
   getProductsBySubcategory,
-  getProductBySlug
+  getProductBySlug,
 };

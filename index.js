@@ -18,6 +18,8 @@ const {OrderRouter}=require("./Route/Order")
 const { createServer } = require("http");
 const { Server }= require("socket.io");
 const {initSocket}=require("./Services/Socket")
+const { TeamRouter } = require("./Route/Team");
+const { TicketRouter } = require("./Route/Support");
 
 const app = express();
 const httpServer = createServer(app);
@@ -64,6 +66,8 @@ app.use("/api/v1/Subcategory", SubcategoryRouter);
 app.use("/api/v1/product", ProductRouter);
 app.use("/api/v1/branch", BranchRouter);
 app.use("/api/v1/Order", OrderRouter);
+app.use("/api/v1/Team", TeamRouter);
+app.use("/api/v1/Support", TicketRouter);
 
 
 //--------------Not Found Route-------------------//
