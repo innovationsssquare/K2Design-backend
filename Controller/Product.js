@@ -13,6 +13,7 @@ const createProduct = async (req, res, next) => {
       sku,
       description,
       variants,
+      images,
       customizations,
       availableQuantities, // Array of quantities to offer for the product
       qty,
@@ -84,13 +85,9 @@ const createProduct = async (req, res, next) => {
     }
 
    
-    if (availableQuantities && availableQuantities.length > 0) {
-      if (!availableQuantities.includes(qty)) {
-        return next(new AppErr("Invalid quantity selected for this product", 400));
-      }
-    }
+    
 
-    // const imageUrls = req.files.map((file) => file.path);
+    const imageUrls = req.files.map((file) => file.path);
 
     // Create product
     const newProduct = new Product({
@@ -99,7 +96,7 @@ const createProduct = async (req, res, next) => {
       price,
       sku,
       description,
-      // images: imageUrls,
+      images: imageUrls,
       variants: JSON.parse(variants),
       customizations:parsedCustomizations,  // Save customizations
       qty: qty,
