@@ -1,5 +1,5 @@
 const express = require("express");
-const { IsSuperOrAdmin } = require("../MiddleWare/isSuperOrAdmin"); 
+const { IsSuperAdmin } = require("../MiddleWare/IsSuperAdmin"); 
 const { body } = require("express-validator");
 const upload =require("../Services/multer")
 
@@ -20,7 +20,7 @@ SubcategoryRouter.post(
   "/create/subcategory",
   body("name").notEmpty().withMessage("Subcategory name is required"),
   body("categoryId").notEmpty().withMessage("category name is required"),
-  IsSuperOrAdmin,
+  IsSuperAdmin,
   createSubcategory
 );
 
@@ -35,13 +35,13 @@ SubcategoryRouter.put(
   "/update/subcategory/:id",
   body("name").notEmpty().withMessage("Subcategory name is required"),
   body("description").optional(),
-  IsSuperOrAdmin,
+  IsSuperAdmin,
   updateSubcategory
 );
 
 // Delete Subcategory
-SubcategoryRouter.delete("/delete/subcategory/:id", IsSuperOrAdmin, deleteSubcategory);
-SubcategoryRouter.patch('/upload/Subcategory-image/:id', upload.single('image'),IsSuperOrAdmin, UploadSubCategory);
+SubcategoryRouter.delete("/delete/subcategory/:id", IsSuperAdmin, deleteSubcategory);
+SubcategoryRouter.patch('/upload/Subcategory-image/:id', upload.single('image'),IsSuperAdmin, UploadSubCategory);
 
 
 module.exports = {SubcategoryRouter};
