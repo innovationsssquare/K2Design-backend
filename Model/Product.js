@@ -31,7 +31,7 @@ const ProductSchema = new Schema({
   slug: { type: String, unique: true }, 
   customizations: [customizationOptionSchema],
   variants: [VariantSchema], // Array of product variants
-  availableQuantities: [String], // Added for flexible qty options like [200, 300, 400, 500]
+  availableQuantities: [Number], // Added for flexible qty options like [200, 300, 400, 500]
   qty: { type: Number, required: true },  // This stores the selected quantity
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
