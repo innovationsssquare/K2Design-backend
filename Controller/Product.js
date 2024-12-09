@@ -87,7 +87,13 @@ const createProduct = async (req, res, next) => {
    
     
 
-    const imageUrls = req.files.map((file) => file.path);
+
+    // const imageUrls = req.files.map((file) => file.path);
+    const imageUrls = req.files.map(file => {
+      // Replace this with cloud upload logic if needed
+      return `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
+    });
+
 
     // Create product
     const newProduct = new Product({
