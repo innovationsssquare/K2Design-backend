@@ -20,6 +20,7 @@ const { Server }= require("socket.io");
 const {initSocket}=require("./Services/Socket")
 const { TeamRouter } = require("./Route/Team");
 const { TicketRouter } = require("./Route/Support");
+DbConnection();
 
 const app = express();
 const httpServer = createServer(app);
