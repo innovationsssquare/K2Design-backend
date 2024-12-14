@@ -13,6 +13,9 @@ const {CategoryRouter}=require("./Route/Category")
 const {ProductRouter}=require("./Route/Product")
 const {SubcategoryRouter}=require("./Route/Subcategory")
 const {BranchRouter}=require("./Route/Branch")
+const {BrochureRouter}=require("./Route/Allproductsroute/Brochure")
+const {BookletRouter}=require("./Route/Allproductsroute/Booklet")
+const {PrintProductRouter}=require("./Route/Allproductsroute/Posterdigitalprint")
 const {UserRouter}=require("./Route/Users")
 const {OrderRouter}=require("./Route/Order")
 const { createServer } = require("http");
@@ -69,6 +72,9 @@ app.use("/api/v1/branch", BranchRouter);
 app.use("/api/v1/Order", OrderRouter);
 app.use("/api/v1/Team", TeamRouter);
 app.use("/api/v1/Support", TicketRouter);
+app.use("/api/v1/Brochure", BrochureRouter);
+app.use("/api/v1/Booklet", BookletRouter);
+app.use("/api/v1/Poster", PrintProductRouter);
 
 
 //--------------Not Found Route-------------------//
