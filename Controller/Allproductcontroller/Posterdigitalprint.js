@@ -176,13 +176,13 @@ const DeletePrintProduct = async (req, res, next) => {
 //     next(new AppErr(error.message, 500));
 //   }
 // };
+
 const CalculatePrintProductPrice = async (req, res, next) => {
   validateRequest(req, next);
 
   try {
     const { size, printingSide, paperType, qty, laminationRequired } = req.body;
 
-    // Modify the printingSide search logic based on the request
     const searchPrintingSide = printingSide === "2 side" ? "1 side" : printingSide;
 
     // Fetch the product based on the given size, printingSide, and paperType
