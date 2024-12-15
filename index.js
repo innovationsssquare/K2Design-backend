@@ -16,6 +16,10 @@ const {BranchRouter}=require("./Route/Branch")
 const {BrochureRouter}=require("./Route/Allproductsroute/Brochure")
 const {BookletRouter}=require("./Route/Allproductsroute/Booklet")
 const {PrintProductRouter}=require("./Route/Allproductsroute/Posterdigitalprint")
+const {FilesAndFoldersRouter}=require("./Route/Allproductsroute/Filesandfolders")
+const { EnvelopeRouter } = require("./Route/Allproductsroute/Envolopes");
+const { LetterheadRouter } = require("./Route/Allproductsroute/Letterhead");
+
 const {UserRouter}=require("./Route/Users")
 const {OrderRouter}=require("./Route/Order")
 const { createServer } = require("http");
@@ -75,6 +79,9 @@ app.use("/api/v1/Support", TicketRouter);
 app.use("/api/v1/Brochure", BrochureRouter);
 app.use("/api/v1/Booklet", BookletRouter);
 app.use("/api/v1/Poster", PrintProductRouter);
+app.use("/api/v1/Filesandfolders", FilesAndFoldersRouter);
+app.use("/api/v1/Envolopes", EnvelopeRouter);
+app.use("/api/v1/Letterhead", LetterheadRouter);
 
 
 //--------------Not Found Route-------------------//
