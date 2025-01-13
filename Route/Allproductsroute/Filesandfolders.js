@@ -8,7 +8,7 @@ const {
   getSingleFilesAndFolders,
   updateFilesAndFoldersProduct,
   deleteFilesAndFoldersProduct,
-} = require("../../Controller/Allproductcontroller/FilesAndFolders");
+} = require("../../Controller/Allproductcontroller/FilesFolders");
 
 const FilesAndFoldersRouter = express.Router();
 
