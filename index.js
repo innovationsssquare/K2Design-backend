@@ -19,6 +19,7 @@ const {PrintProductRouter}=require("./Route/Allproductsroute/Posterdigitalprint"
 const {FilesAndFoldersRouter}=require("./Route/Allproductsroute/Filesandfolders")
 const { EnvelopeRouter } = require("./Route/Allproductsroute/Envolopes");
 const { LetterheadRouter } = require("./Route/Allproductsroute/Letterhead");
+const { VisitingCardRouter } = require("./Route/Allproductsroute/Visitingcard");
 
 const {UserRouter}=require("./Route/Users")
 const {OrderRouter}=require("./Route/Order")
@@ -82,6 +83,7 @@ app.use("/api/v1/Poster", PrintProductRouter);
 app.use("/api/v1/Filesandfolders", FilesAndFoldersRouter);
 app.use("/api/v1/Envolopes", EnvelopeRouter);
 app.use("/api/v1/Letterhead", LetterheadRouter);
+app.use("/api/v1/Visitingcard", VisitingCardRouter);
 
 
 //--------------Not Found Route-------------------//
