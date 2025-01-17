@@ -20,6 +20,10 @@ const {FilesAndFoldersRouter}=require("./Route/Allproductsroute/Filesandfolders"
 const { EnvelopeRouter } = require("./Route/Allproductsroute/Envolopes");
 const { LetterheadRouter } = require("./Route/Allproductsroute/Letterhead");
 const { VisitingCardRouter } = require("./Route/Allproductsroute/Visitingcard");
+const { PaperbagsRouter } = require("./Route/Allproductsroute/Paperbags");
+const { PavatiBooksRouter } = require("./Route/Allproductsroute/Pavtibook");
+const { TagsRouter } = require("./Route/Allproductsroute/Tag");
+const { StickerLabelsRouter } = require("./Route/Allproductsroute/Stickers");
 
 const {UserRouter}=require("./Route/Users")
 const {OrderRouter}=require("./Route/Order")
@@ -84,6 +88,10 @@ app.use("/api/v1/Filesandfolders", FilesAndFoldersRouter);
 app.use("/api/v1/Envolopes", EnvelopeRouter);
 app.use("/api/v1/Letterhead", LetterheadRouter);
 app.use("/api/v1/Visitingcard", VisitingCardRouter);
+app.use("/api/v1/Paper", PaperbagsRouter);
+app.use("/api/v1/Pavti", PavatiBooksRouter);
+app.use("/api/v1/Tag",TagsRouter );
+app.use("/api/v1/Stickers",StickerLabelsRouter );
 
 
 app.get("*", (req, res, next) => {
