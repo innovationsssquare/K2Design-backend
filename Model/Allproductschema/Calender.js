@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
 
-const billBookSchema = new mongoose.Schema(
+const wallCalendarSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -34,27 +34,27 @@ const billBookSchema = new mongoose.Schema(
     },
     configurations: [
       {
-        type: {
-          type: String,
-          required: true,
-          enum: ["One Colour", "Multi Colour"],
-        },
         size: {
           type: String,
           required: true,
-          enum: ["1/16", "1/8", "1/6", "1/5", "1/4"], // Includes all sizes mentioned in the image
+          enum: ["11.5 x 18", "10 x 15"], // Regular size and Small size
         },
-        orientation: {
+        paperType: {
           type: String,
           required: true,
-          enum: ["Horizontal", "Vertical"], // Includes both orientations
+          enum: ["130gsm art paper", "80gsm maplito"],
+        },
+        sides: {
+          type: String,
+          required: true,
+          enum: ["front back"], // Fixed value for this product
         },
         quantities: [
           {
             qty: {
               type: Number,
               required: true,
-              enum: [6, 10, 20, 50, 5, 10], // As defined in the image
+              enum: [1000, 2000, 4000], // Fixed quantities
             },
             costPerUnit: {
               type: Number,
@@ -69,11 +69,11 @@ const billBookSchema = new mongoose.Schema(
 );
 
 // Middleware to generate slug dynamically
-billBookSchema.pre("save", function (next) {
+wallCalendarSchema.pre("save", function (next) {
   if (this.name && !this.slug) {
     this.slug = slugify(this.name, { lower: true });
   }
   next();
 });
 
-module.exports = mongoose.model("BillBook", billBookSchema);
+module.exports = mongoose.model("WallCalendar", wallCalendarSchema);

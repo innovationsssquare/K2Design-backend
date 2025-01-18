@@ -24,6 +24,10 @@ const { PaperbagsRouter } = require("./Route/Allproductsroute/Paperbags");
 const { PavatiBooksRouter } = require("./Route/Allproductsroute/Pavtibook");
 const { TagsRouter } = require("./Route/Allproductsroute/Tag");
 const { StickerLabelsRouter } = require("./Route/Allproductsroute/Stickers");
+const { StampRouter } = require("./Route/Allproductsroute/Stamps");
+const { WeddingCardRouter } = require("./Route/Allproductsroute/Weddingcard");
+const { WallCalendarRouter } = require("./Route/Allproductsroute/Calender");
+const { BillBookRouter } = require("./Route/Allproductsroute/Billbooks");
 
 const {UserRouter}=require("./Route/Users")
 const {OrderRouter}=require("./Route/Order")
@@ -92,6 +96,10 @@ app.use("/api/v1/Paper", PaperbagsRouter);
 app.use("/api/v1/Pavti", PavatiBooksRouter);
 app.use("/api/v1/Tag",TagsRouter );
 app.use("/api/v1/Stickers",StickerLabelsRouter );
+app.use("/api/v1/Stamp",StampRouter );
+app.use("/api/v1/Wedding",WeddingCardRouter );
+app.use("/api/v1/Calender",WallCalendarRouter );
+app.use("/api/v1/Billsbooks",BillBookRouter );
 
 
 app.get("*", (req, res, next) => {

@@ -1,15 +1,15 @@
 const express = require("express");
 const { body, param, validationResult } = require("express-validator");
 const {
-  CreateBillBook,
-  UpdateBillBook,
-  GetAllBillBooks,
-  GetSingleBillBook,
-  DeleteBillBook,
-  CalculateBillBookPrice,
-} = require("../../Controller/Allproductcontroller/Billbooks");
+  CreateWallCalendar,
+  UpdateWallCalendar,
+  GetAllWallCalendars,
+  GetSingleWallCalendar,
+  DeleteWallCalendar,
+  CalculateWallCalendarPrice,
+} = require("../../Controller/Allproductcontroller/Calender");
 
-const BillBookRouter = express.Router();
+const WallCalendarRouter = express.Router();
 
 // Middleware to handle validation errors
 const validateRequest = (req, res, next) => {
@@ -20,66 +20,64 @@ const validateRequest = (req, res, next) => {
   next();
 };
 
-// Route to create a bill book
-BillBookRouter.post(
-  "/create/BillBook",
+// Route to create a wall calendar
+WallCalendarRouter.post(
+  "/create/WallCalendar",
   [
     body("name").notEmpty().withMessage("Name is required"),
     body("subcategoryId").notEmpty().withMessage("Subcategory ID is required"),
     body("sku").notEmpty().withMessage("SKU is required"),
     body("images").isArray().withMessage("Images must be an array"),
     body("configurations").isArray({ min: 1 }).withMessage("Configurations are required"),
-    body("configurations.*.type").notEmpty().withMessage("Type is required"),
     body("configurations.*.size").notEmpty().withMessage("Size is required"),
-    body("configurations.*.orientation").notEmpty().withMessage("Orientation is required"),
+    body("configurations.*.paperType").notEmpty().withMessage("Paper Type is required"),
     body("configurations.*.quantities").isArray({ min: 1 }).withMessage("Quantities are required"),
   ],
   validateRequest,
-  CreateBillBook
+  CreateWallCalendar
 );
 
-// Route to calculate bill book price
-BillBookRouter.post(
+// Route to calculate wall calendar price
+WallCalendarRouter.post(
   "/calculatePrice",
   [
-    body("type").notEmpty().withMessage("Type is required"),
     body("size").notEmpty().withMessage("Size is required"),
-    body("orientation").notEmpty().withMessage("Orientation is required"),
+    body("paperType").notEmpty().withMessage("Paper Type is required"),
     body("qty").isNumeric().withMessage("Quantity must be numeric"),
   ],
   validateRequest,
-  CalculateBillBookPrice
+  CalculateWallCalendarPrice
 );
 
-// Route to update a bill book
-BillBookRouter.put(
-  "/update/BillBook/:id",
+// Route to update a wall calendar
+WallCalendarRouter.put(
+  "/update/WallCalendar/:id",
   [
-    param("id").isMongoId().withMessage("Invalid Bill Book ID"),
+    param("id").isMongoId().withMessage("Invalid Wall Calendar ID"),
     body("name").optional().notEmpty().withMessage("Name cannot be empty"),
     body("sku").optional().notEmpty().withMessage("SKU cannot be empty"),
   ],
   validateRequest,
-  UpdateBillBook
+  UpdateWallCalendar
 );
 
-// Route to get all bill books
-BillBookRouter.get("/get/BillBooks", GetAllBillBooks);
+// Route to get all wall calendars
+WallCalendarRouter.get("/get/WallCalendars", GetAllWallCalendars);
 
-// Route to get a single bill book by ID
-BillBookRouter.get(
-  "/get/BillBook/:id",
-  [param("id").isMongoId().withMessage("Invalid Bill Book ID")],
+// Route to get a single wall calendar by ID
+WallCalendarRouter.get(
+  "/get/WallCalendar/:id",
+  [param("id").isMongoId().withMessage("Invalid Wall Calendar ID")],
   validateRequest,
-  GetSingleBillBook
+  GetSingleWallCalendar
 );
 
-// Route to delete a bill book by ID
-BillBookRouter.delete(
-  "/delete/BillBook/:id",
-  [param("id").isMongoId().withMessage("Invalid Bill Book ID")],
+// Route to delete a wall calendar by ID
+WallCalendarRouter.delete(
+  "/delete/WallCalendar/:id",
+  [param("id").isMongoId().withMessage("Invalid Wall Calendar ID")],
   validateRequest,
-  DeleteBillBook
+  DeleteWallCalendar
 );
 
-module.exports = { BillBookRouter };
+module.exports = { WallCalendarRouter };

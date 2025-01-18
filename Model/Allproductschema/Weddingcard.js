@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
 
-const billBookSchema = new mongoose.Schema(
+const weddingCardSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -34,31 +34,37 @@ const billBookSchema = new mongoose.Schema(
     },
     configurations: [
       {
-        type: {
-          type: String,
-          required: true,
-          enum: ["One Colour", "Multi Colour"],
-        },
         size: {
           type: String,
           required: true,
-          enum: ["1/16", "1/8", "1/6", "1/5", "1/4"], // Includes all sizes mentioned in the image
         },
-        orientation: {
+        paperType: {
           type: String,
           required: true,
-          enum: ["Horizontal", "Vertical"], // Includes both orientations
+          enum: ["210 gsm art", "250 gsm art"],
+        },
+        sides: {
+          type: Number,
+          required: true,
+          enum: [1, 2], // 1 for single-side, 2 for double-side printing
         },
         quantities: [
           {
             qty: {
               type: Number,
               required: true,
-              enum: [6, 10, 20, 50, 5, 10], // As defined in the image
             },
-            costPerUnit: {
+            baseRate: {
               type: Number,
               required: true,
+            },
+            laminationCost: {
+              type: Number,
+              default: 0,
+            },
+            envelopeCost: {
+              type: Number,
+              default: 0,
             },
           },
         ],
@@ -69,11 +75,11 @@ const billBookSchema = new mongoose.Schema(
 );
 
 // Middleware to generate slug dynamically
-billBookSchema.pre("save", function (next) {
+weddingCardSchema.pre("save", function (next) {
   if (this.name && !this.slug) {
     this.slug = slugify(this.name, { lower: true });
   }
   next();
 });
 
-module.exports = mongoose.model("BillBook", billBookSchema);
+module.exports = mongoose.model("WeddingCard", weddingCardSchema);
