@@ -28,11 +28,6 @@ BillBookRouter.post(
     body("subcategoryId").notEmpty().withMessage("Subcategory ID is required"),
     body("sku").notEmpty().withMessage("SKU is required"),
     body("images").isArray().withMessage("Images must be an array"),
-    body("configurations").isArray({ min: 1 }).withMessage("Configurations are required"),
-    body("configurations.*.type").notEmpty().withMessage("Type is required"),
-    body("configurations.*.size").notEmpty().withMessage("Size is required"),
-    body("configurations.*.orientation").notEmpty().withMessage("Orientation is required"),
-    body("configurations.*.quantities").isArray({ min: 1 }).withMessage("Quantities are required"),
   ],
   validateRequest,
   CreateBillBook
@@ -44,7 +39,6 @@ BillBookRouter.post(
   [
     body("type").notEmpty().withMessage("Type is required"),
     body("size").notEmpty().withMessage("Size is required"),
-    body("orientation").notEmpty().withMessage("Orientation is required"),
     body("qty").isNumeric().withMessage("Quantity must be numeric"),
   ],
   validateRequest,

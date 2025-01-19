@@ -1,16 +1,20 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
 
-const billBookSchema = new mongoose.Schema(
+const pamphletSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
-      trim: true, // Example: "1/16 W+NP"
+      trim: true,
     },
     subcategoryId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Subcategory",
+      required: true,
+    },
+    price: {
+      type: Number,
       required: true,
     },
     sku: {
@@ -28,36 +32,34 @@ const billBookSchema = new mongoose.Schema(
         required: true,
       },
     ],
-    slug: {
-      type: String,
-      unique: true,
-    },
+    slug: { type: String, unique: true },
     configurations: [
       {
-        type: {
-          type: String,
-          required: true,
-          enum: ["One Colour", "Multi Colour"], // Printing type
-        },
         size: {
           type: String,
           required: true,
-          enum: ["1/16", "1/8", "1/6", "1/5", "1/4"], // Based on the PDF
+          enum: [
+            "A5 / 1/8",
+            "A4 / 1/4",
+            "A4 / 1/18",
+            "A3 / 12x18",
+            "A3 / 18x23",
+            "A2 / 18x23",
+            "7 x 10",
+            "10 x 15",
+            "15 x 20",
+            "20 x 30",
+          ],
         },
-        pageDetails: {
+        paperType: {
           type: String,
           required: true,
-          enum: ["W+NP", "W+P+Y"], // Page types
+          enum: ["130 gsm", "70 gsm"],
         },
-        bindingType: {
+        printingType: {
           type: String,
           required: true,
-          enum: ["Cover", "Double"], // Binding type
-        },
-        pageCount: {
-          type: Number,
-          required: true,
-          enum: [50, 100], // Page count
+          enum: ["Onecolour", "Multicolor"], // Added printing type
         },
         quantities: [
           {
@@ -69,6 +71,14 @@ const billBookSchema = new mongoose.Schema(
               type: Number,
               required: true,
             },
+            twosidecost: {
+              type: Number,
+              default: 0,
+            },
+            cuttingOptionCost: {
+              type: Number,
+              default: 0, // Additional cost for cutting (Flash or Extra Border)
+            },
           },
         ],
       },
@@ -78,11 +88,9 @@ const billBookSchema = new mongoose.Schema(
 );
 
 // Middleware to generate slug dynamically
-billBookSchema.pre("save", function (next) {
-  if (this.name && !this.slug) {
-    this.slug = slugify(this.name, { lower: true });
-  }
+pamphletSchema.pre("save", function (next) {
+  this.slug = slugify(this.name, { lower: true });
   next();
 });
 
-module.exports = mongoose.model("BillBook", billBookSchema);
+module.exports = mongoose.model("Pamphlet", pamphletSchema);

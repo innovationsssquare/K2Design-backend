@@ -4,12 +4,38 @@ const AppErr = require("../../Services/AppErr");
 // Create Bill Book
 const CreateBillBook = async (req, res, next) => {
   try {
-    const { name, subcategoryId, sku, description, images, configurations } = req.body;
+    const {
+      name,
+      subcategoryId,
+      sku,
+      description,
+      images,
+      configurations,
+    } = req.body;
 
     // Check if SKU already exists
     const existingProduct = await BillBook.findOne({ sku });
     if (existingProduct) {
       return next(new AppErr("Product with this SKU already exists", 400));
+    }
+
+    // Validate configurations
+    for (const config of configurations) {
+      if (
+        !["One Colour", "Multi Colour"].includes(config.type) ||
+        !["1/16", "1/8", "1/6", "1/5", "1/4"].includes(config.size) ||
+        !["W+NP", "W+P+Y"].includes(config.pageDetails) ||
+        !["Cover", "Double"].includes(config.bindingType) ||
+        ![50, 100].includes(config.pageCount)
+      ) {
+        return next(new AppErr("Invalid configuration data provided", 400));
+      }
+
+      for (const quantity of config.quantities) {
+        if (typeof quantity.qty !== "number" || typeof quantity.costPerUnit !== "number") {
+          return next(new AppErr("Invalid quantities data provided", 400));
+        }
+      }
     }
 
     const newBillBook = new BillBook({
@@ -33,27 +59,34 @@ const CreateBillBook = async (req, res, next) => {
   }
 };
 
+
 // Calculate Bill Book Price
 const CalculateBillBookPrice = async (req, res, next) => {
   try {
-    const { type, size, orientation, qty } = req.body;
+    const { type, size, pageDetails, bindingType, pageCount, qty } = req.body;
 
-    // Find bill book configuration by type, size, and orientation
+    // Find bill book configuration by provided details
     const billBook = await BillBook.findOne({
       "configurations.type": type,
       "configurations.size": size,
-      "configurations.orientation": orientation,
+      "configurations.pageDetails": pageDetails,
+      "configurations.bindingType": bindingType,
+      "configurations.pageCount": pageCount,
     });
 
     if (!billBook) {
-      return next(new AppErr("Bill Book with specified configuration not found", 404));
+      return next(
+        new AppErr("Bill Book with specified configuration not found", 404)
+      );
     }
 
     const configuration = billBook.configurations.find(
       (config) =>
         config.type === type &&
         config.size === size &&
-        config.orientation === orientation
+        config.pageDetails === pageDetails &&
+        config.bindingType === bindingType &&
+        config.pageCount === pageCount
     );
 
     if (!configuration) {
@@ -76,6 +109,7 @@ const CalculateBillBookPrice = async (req, res, next) => {
     next(new AppErr(error.message, 500));
   }
 };
+
 
 // Get All Bill Books
 const GetAllBillBooks = async (req, res, next) => {

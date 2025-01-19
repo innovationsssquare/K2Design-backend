@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
 
-const billBookSchema = new mongoose.Schema(
+const invitationCardSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
-      trim: true, // Example: "1/16 W+NP"
+      trim: true, 
     },
     subcategoryId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -34,41 +34,27 @@ const billBookSchema = new mongoose.Schema(
     },
     configurations: [
       {
-        type: {
-          type: String,
-          required: true,
-          enum: ["One Colour", "Multi Colour"], // Printing type
-        },
         size: {
           type: String,
           required: true,
-          enum: ["1/16", "1/8", "1/6", "1/5", "1/4"], // Based on the PDF
-        },
-        pageDetails: {
-          type: String,
-          required: true,
-          enum: ["W+NP", "W+P+Y"], // Page types
-        },
-        bindingType: {
-          type: String,
-          required: true,
-          enum: ["Cover", "Double"], // Binding type
-        },
-        pageCount: {
-          type: Number,
-          required: true,
-          enum: [50, 100], // Page count
+          enum: ["6x4", "7x5", "6x9"], // Available sizes
         },
         quantities: [
           {
             qty: {
               type: Number,
               required: true,
+              enum: [100, 200, 300, 500, 1000, 2000], // Quantities
             },
             costPerUnit: {
               type: Number,
               required: true,
             },
+            laminationcost: {
+              type: Number,
+              required: true,
+            },
+
           },
         ],
       },
@@ -78,11 +64,11 @@ const billBookSchema = new mongoose.Schema(
 );
 
 // Middleware to generate slug dynamically
-billBookSchema.pre("save", function (next) {
+invitationCardSchema.pre("save", function (next) {
   if (this.name && !this.slug) {
     this.slug = slugify(this.name, { lower: true });
   }
   next();
 });
 
-module.exports = mongoose.model("BillBook", billBookSchema);
+module.exports = mongoose.model("InvitationCard", invitationCardSchema);

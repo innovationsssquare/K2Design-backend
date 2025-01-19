@@ -28,6 +28,8 @@ const { StampRouter } = require("./Route/Allproductsroute/Stamps");
 const { WeddingCardRouter } = require("./Route/Allproductsroute/Weddingcard");
 const { WallCalendarRouter } = require("./Route/Allproductsroute/Calender");
 const { BillBookRouter } = require("./Route/Allproductsroute/Billbooks");
+const { PamphletRouter } = require("./Route/Allproductsroute/Pamphlets");
+const { InvitationCardRouter } = require("./Route/Allproductsroute/Invitation");
 
 const {UserRouter}=require("./Route/Users")
 const {OrderRouter}=require("./Route/Order")
@@ -100,6 +102,8 @@ app.use("/api/v1/Stamp",StampRouter );
 app.use("/api/v1/Wedding",WeddingCardRouter );
 app.use("/api/v1/Calender",WallCalendarRouter );
 app.use("/api/v1/Billsbooks",BillBookRouter );
+app.use("/api/v1/Pamphlets",PamphletRouter );
+app.use("/api/v1/Invitation",InvitationCardRouter );
 
 
 app.get("*", (req, res, next) => {
