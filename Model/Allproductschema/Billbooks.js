@@ -8,9 +8,9 @@ const billBookSchema = new mongoose.Schema(
       required: true,
       trim: true, // Example: "1/16 W+NP"
     },
-    subcategoryId: {
+    categoryId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Subcategory",
+      ref: "Category",
       required: true,
     },
     sku: {

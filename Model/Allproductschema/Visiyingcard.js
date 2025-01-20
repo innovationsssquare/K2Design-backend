@@ -8,9 +8,9 @@ const visitingCardSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    subcategoryId: {
+    categoryId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Subcategory",
+      ref: "Category",
       required: true,
     },
     price: {
@@ -40,47 +40,47 @@ const visitingCardSchema = new mongoose.Schema(
       {
         material: {
           type: String,
-          required: true, 
+          required: true,
         },
         sideRates: {
           oneSide: {
             type: Number,
-            required: true, 
+            required: true,
           },
           twoSide: {
             type: Number,
-            required: true, 
+            required: true,
           },
         },
         laminationRates: {
           glossFront: {
             type: Number,
-            default: 0, 
+            default: 0,
           },
           glossBack: {
             type: Number,
-            default: 0, 
+            default: 0,
           },
         },
         uvRates: {
           uvFront: {
             type: Number,
-            default: 0, 
+            default: 0,
           },
           uvBack: {
             type: Number,
-            default: 0, 
+            default: 0,
           },
         },
         quantities: [
           {
             qty: {
               type: Number,
-              required: true, 
+              required: true,
             },
             costPerUnit: {
               type: Number,
-              default:0
+              default: 0,
             },
           },
         ],

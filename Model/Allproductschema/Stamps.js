@@ -8,9 +8,9 @@ const stampSchema = new mongoose.Schema(
       required: true,
       trim: true, // Example: "Basic - Nylon Stamp", "Sun Stamp", "Dater Stamp"
     },
-    subcategoryId: {
+    categoryId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Subcategory",
+      ref: "Category",
       required: true,
     },
     sku: {

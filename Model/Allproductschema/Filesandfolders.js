@@ -8,7 +8,11 @@ const filesAndFoldersSchema = new mongoose.Schema(
     description: { type: String, trim: true },
     images: [{ type: String, required: true }],
     slug: { type: String, unique: true },
-
+    categoryId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      required: true,
+    },
     configurations: [
       {
         productType: {

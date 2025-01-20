@@ -8,9 +8,9 @@ const printSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    subcategoryId: {
+    categoryId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Subcategory",
+      ref: "Category",
       required: true,
     },
     sku: {
@@ -35,12 +35,12 @@ const printSchema = new mongoose.Schema(
         size: {
           type: String,
           required: true,
-          enum: ["12x18", "A4"], 
+          enum: ["12x18", "A4"],
         },
         printingSide: {
           type: String,
           required: true,
-          enum: ["1 side", "2 side"], 
+          enum: ["1 side", "2 side"],
         },
         paperTypes: [
           {
@@ -65,7 +65,7 @@ const printSchema = new mongoose.Schema(
                     "101-300",
                     "301-500",
                     "501-1000",
-                  ], 
+                  ],
                 },
                 costPerUnit: {
                   type: Number,

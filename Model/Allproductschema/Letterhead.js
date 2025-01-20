@@ -47,6 +47,11 @@ const LetterheadsSchema = new mongoose.Schema({
     required: true,
     enum: ["1 side"],
   },
+  categoryId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Category",
+    required: true,
+  },
   configurations: [
     {
       quantity: { type: Number, required: true },

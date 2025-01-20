@@ -4,9 +4,9 @@ const slugify = require("slugify");
 
 const BrochureSchema = new Schema({
   name: { type: String, required: true },
-  subcategoryId: {
+  categoryId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Subcategory",
+    ref: "Category",
     required: true,
   },
   price: { type: Number, required: true },
@@ -14,12 +14,12 @@ const BrochureSchema = new Schema({
   description: { type: String },
   images: [{ type: String }],
   slug: { type: String, unique: true },
- quantities: [
+  quantities: [
     {
-      size: { type: String, required: true }, 
+      size: { type: String, required: true },
       paperType: { type: String, required: true },
       qty: { type: Number, required: true },
-      costPerUnit: { type: Number, required: true }, 
+      costPerUnit: { type: Number, required: true },
       laminationCost: { type: Number, default: 0 },
     },
   ],

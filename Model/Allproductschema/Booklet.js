@@ -8,9 +8,9 @@ const bookletSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    subcategoryId: {
+    categoryId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Subcategory",
+      ref: "Category",
       required: true,
     },
     price: {
@@ -36,7 +36,7 @@ const bookletSchema = new mongoose.Schema(
     configurations: [
       {
         size: {
-          type: String, 
+          type: String,
           required: true,
         },
         pageType: {
@@ -68,7 +68,6 @@ const bookletSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
 
 bookletSchema.pre("save", function (next) {
   this.slug = slugify(this.name, { lower: true });

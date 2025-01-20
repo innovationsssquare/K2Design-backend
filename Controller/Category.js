@@ -1,11 +1,8 @@
 const Category = require('../Model/Category ');
-const AppErr = require('../Services/AppErr'); // Custom error handling class (optional)
+const AppErr = require('../Services/AppErr'); 
 const Methods = require("../Services/GlobalMethod/Method");
-const SubcategoryModel = require('../Model/Subcategories')
-const ProductModel = require('../Model/Product');
+const mongoose = require("mongoose"); // Add this line to import mongoose
 
-
-const Api = new Methods();
 
 // Create a new category
 const createCategory = async (req, res, next) => {
@@ -120,23 +117,36 @@ const deleteCategory = async (req, res, next) => {
 
 const getCategoryHierarchy = async (req, res, next) => {
   try {
-    const categories = await Category.find()
-      .populate({
-        path: 'subcategories',
-        populate: {
-          path: 'products',
-        },
-      });
+    const categories = await Category.find();
+
+    // Populate each product based on productType dynamically
+    const populatedCategories = await Promise.all(
+      categories.map(async (category) => {
+        const populatedProducts = await Promise.all(
+          category.products.map(async (product) => {
+            const model = mongoose.model(product.productType); // Get the model dynamically based on productType
+            const productData = await model.findById(product.productId); // Fetch product data
+            return { ...productData?._doc, productType: product.productType }; // Include productType in the response
+          })
+        );
+
+        return {
+          ...category._doc,
+          products: populatedProducts.filter((p) => p), // Exclude any null/undefined results
+        };
+      })
+    );
 
     return res.status(200).json({
       status: true,
       statuscode: 200,
-      data: categories,
+      data: populatedCategories,
     });
   } catch (error) {
     return next(new AppErr(error.message, 500));
   }
 };
+
 
 const UploadCategory = async (req, res, next) => {
   try {

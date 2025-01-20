@@ -8,13 +8,17 @@ const envelopeSchema = new mongoose.Schema(
     description: { type: String, trim: true },
     images: [{ type: String, required: true }], // URLs for product images
     slug: { type: String, unique: true },
-
+    categoryId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      required: true,
+    },
     configurations: [
       {
         size: {
           type: String,
           required: true,
-          enum: ["9x4", "7x5", "6x9", "A4","6x4"], // Envelope sizes
+          enum: ["9x4", "7x5", "6x9", "A4", "6x4"], // Envelope sizes
         },
         printingType: {
           type: String,

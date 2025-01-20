@@ -8,9 +8,9 @@ const tagSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    subcategoryId: {
+    categoryId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Subcategory",
+      ref: "Category",
       required: true,
     },
     sku: {

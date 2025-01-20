@@ -12,7 +12,12 @@ const CategorySchema = new Schema({
   image: {
     type: String,
   },
-  subcategories: [{ type: mongoose.Schema.Types.ObjectId, ref: "Subcategory" }],
+  products: [
+    {
+      productId: { type: mongoose.Schema.Types.ObjectId, required: true },
+      productType: { type: String, required: true },
+    },
+  ],
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });
