@@ -3,7 +3,7 @@ const slugify = require("slugify");
 
 const pavatiBookSchema = new mongoose.Schema(
   {
-    product: {
+    name: {
       type: String,
       required: true,
       trim: true,
