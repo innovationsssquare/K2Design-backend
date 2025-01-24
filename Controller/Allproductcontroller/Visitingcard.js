@@ -183,14 +183,12 @@ const CalculateVisitingCardPrice = async (req, res, next) => {
   try {
     const { material, lamination, uvType, sideType, qty } = req.body;
 
-    console.log(req.body);
 
     // Find the card configuration by material
     const visitingCard = await VisitingCard.findOne({
       "configurations.material": material,
     });
 
-    console.log(visitingCard);
 
     if (!visitingCard) {
       return next(
@@ -218,8 +216,27 @@ const CalculateVisitingCardPrice = async (req, res, next) => {
       return next(new AppErr("Invalid side type selected", 400));
     }
 
-    const laminationRate = configuration.laminationRates[lamination] || 0;
-    const uvRate = configuration.uvRates[uvType] || 0;
+    // const laminationRate = configuration.laminationRates[lamination] || 0;
+
+    let laminationRate = 0;
+    if (lamination === "both") {
+      laminationRate =
+        (configuration.laminationRates.glossFront || 0) +
+        (configuration.laminationRates.glossBack || 0);
+    } else {
+      laminationRate = configuration.laminationRates[lamination] || 0;
+    }
+
+    let uvRate = 0;
+    if (uvType === "both") {
+      uvRate =
+        (configuration.uvRates.uvFront || 0) +
+        (configuration.uvRates.uvBack || 0);
+    } else {
+      uvRate = configuration.uvRates[uvType] || 0
+    }
+
+    // const uvRate = configuration.uvRates[uvType] || 0;
 
     // Validate quantity
     const quantityOption = configuration.quantities.find(
