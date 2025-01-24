@@ -44,7 +44,6 @@ VisitingCardRouter.post(
   "/calculatePrice",
   [
     body("material").notEmpty().withMessage("Material is required"),
-    body("laminationRates").notEmpty().withMessage("laminationRates is required"),
     body("qty")
       .isNumeric()
       .withMessage("Quantity is required and must be numeric"),
