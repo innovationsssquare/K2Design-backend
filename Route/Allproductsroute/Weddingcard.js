@@ -43,7 +43,6 @@ WeddingCardRouter.post(
   [
     body("size").notEmpty().withMessage("Size is required"),
     body("paperType").notEmpty().withMessage("Paper Type is required"),
-    body("sides").isIn([1, 2]).withMessage("Sides must be 1 or 2"),
     body("qty").isNumeric().withMessage("Quantity must be numeric"),
   ],
   validateRequest,
