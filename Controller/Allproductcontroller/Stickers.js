@@ -129,11 +129,78 @@ const DeleteStickerLabel = async (req, res, next) => {
 };
 
 // Calculate Sticker/Label Price
+// const CalculateStickerLabelPrice = async (req, res, next) => {
+//   validateRequest(req, next);
+
+//   try {
+//     const { size, qty, extraOptions } = req.body;
+
+//     // Find the sticker/label document
+//     const stickerLabel = await StickerLabel.findOne({
+//       $or: [
+//         { "configurations.size": size },
+//         { "customizations.size": size },
+//       ],
+//     });
+
+//     if (!stickerLabel) {
+//       return next(new AppErr("Sticker/Label with specified size not found", 404));
+//     }
+
+//     // Try to find the size in configurations (fixed sizes)
+//     const configuration = stickerLabel.configurations.find((config) => config.size === size);
+//     let priceDetails;
+
+//     if (configuration) {
+//       // Find the specific quantity option
+//       const quantityOption = configuration.quantities.find((q) => q.qty === qty);
+
+//       if (!quantityOption) {
+//         return next(new AppErr("Invalid quantity selected for the specified size", 400));
+//       }
+
+//       // Calculate base price and extra cost
+//       const basePrice = quantityOption.unitRate * qty;
+//       const extraCost = (extraOptions?.laminationCost || 0);
+//       priceDetails = { basePrice, extraCost, totalPrice: basePrice + extraCost };
+//     } else {
+//       // Try to find the size in customizations
+//       const customization = stickerLabel.customizations.find((cust) => cust.size === size);
+
+//       if (!customization) {
+//         return next(new AppErr("Configuration or customization for the specified size not found", 404));
+//       }
+
+//       // Find the matching range for quantity
+//       const quantityRange = customization.quantities.find(
+//         (range) => qty >= range.minQty && qty <= range.maxQty
+//       );
+
+//       if (!quantityRange) {
+//         return next(new AppErr("Invalid quantity selected for customization", 400));
+//       }
+
+//       // Calculate base price and extra cost
+//       const basePrice = quantityRange.unitRate * qty;
+//       const extraCost = (extraOptions?.laminationCost || 0) ;
+//       priceDetails = { basePrice, extraCost, totalPrice: basePrice + extraCost };
+//     }
+
+//     // Send the response
+//     res.status(200).json({
+//       status: true,
+//       data: priceDetails,
+//     });
+//   } catch (error) {
+//     next(new AppErr(error.message, 500));
+//   }
+// };
+
 const CalculateStickerLabelPrice = async (req, res, next) => {
   validateRequest(req, next);
 
   try {
-    const { size, qty, extraOptions } = req.body;
+    const { size, qty } = req.body;
 
     // Find the sticker/label document
     const stickerLabel = await StickerLabel.findOne({
@@ -147,9 +214,10 @@ const CalculateStickerLabelPrice = async (req, res, next) => {
       return next(new AppErr("Sticker/Label with specified size not found", 404));
     }
 
+    let priceDetails;
+
     // Try to find the size in configurations (fixed sizes)
     const configuration = stickerLabel.configurations.find((config) => config.size === size);
-    let priceDetails;
 
     if (configuration) {
       // Find the specific quantity option
@@ -161,7 +229,7 @@ const CalculateStickerLabelPrice = async (req, res, next) => {
 
       // Calculate base price and extra cost
       const basePrice = quantityOption.unitRate * qty;
-      const extraCost = (extraOptions?.laminationCost || 0);
+      const extraCost = quantityOption.laminationCost; // Retrieve lamination cost from the array
       priceDetails = { basePrice, extraCost, totalPrice: basePrice + extraCost };
     } else {
       // Try to find the size in customizations
@@ -182,7 +250,7 @@ const CalculateStickerLabelPrice = async (req, res, next) => {
 
       // Calculate base price and extra cost
       const basePrice = quantityRange.unitRate * qty;
-      const extraCost = (extraOptions?.laminationCost || 0) ;
+      const extraCost = quantityRange.laminationCost; // Retrieve lamination cost from the array
       priceDetails = { basePrice, extraCost, totalPrice: basePrice + extraCost };
     }
 
@@ -195,6 +263,9 @@ const CalculateStickerLabelPrice = async (req, res, next) => {
     next(new AppErr(error.message, 500));
   }
 };
+
+
+
 
 module.exports = {
   CreateStickerLabel,
