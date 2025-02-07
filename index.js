@@ -30,6 +30,7 @@ const { WallCalendarRouter } = require("./Route/Allproductsroute/Calender");
 const { BillBookRouter } = require("./Route/Allproductsroute/Billbooks");
 const { PamphletRouter } = require("./Route/Allproductsroute/Pamphlets");
 const { InvitationCardRouter } = require("./Route/Allproductsroute/Invitation");
+const { VinylPrintRouter } = require("./Route/Allproductsroute/Mediaprinting/Vinylprint");
 
 const {UserRouter}=require("./Route/Users")
 const {OrderRouter}=require("./Route/Order")
@@ -104,6 +105,7 @@ app.use("/api/v1/Calender",WallCalendarRouter );
 app.use("/api/v1/Billsbooks",BillBookRouter );
 app.use("/api/v1/Pamphlets",PamphletRouter );
 app.use("/api/v1/Invitation",InvitationCardRouter );
+app.use("/api/v1/Vinylprint",VinylPrintRouter );
 
 
 app.get("*", (req, res, next) => {
