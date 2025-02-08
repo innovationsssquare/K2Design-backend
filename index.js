@@ -35,6 +35,7 @@ const { NightGlowPrintRouter } = require("./Route/Allproductsroute/Mediaprinting
 const { CanvasPrintRouter } = require("./Route/Allproductsroute/Mediaprinting/Canvasprint");
 const { BacklitFlexPrintRouter } = require("./Route/Allproductsroute/Mediaprinting/Backlitflexprint");
 const { TranslitPrintRouter } = require("./Route/Allproductsroute/Mediaprinting/TranslitPrint");
+const { ThreeMReflectorPrintRouter } = require("./Route/Allproductsroute/Mediaprinting/3MReflectorPrint");
 
 const {UserRouter}=require("./Route/Users")
 const {OrderRouter}=require("./Route/Order")
@@ -114,6 +115,7 @@ app.use("/api/v1/NightGlowPrint",NightGlowPrintRouter );
 app.use("/api/v1/Canvasprint",CanvasPrintRouter );
 app.use("/api/v1/BacklitPrint",BacklitFlexPrintRouter );
 app.use("/api/v1/TranslitPrint",TranslitPrintRouter );
+app.use("/api/v1/3MReflectorPrint",ThreeMReflectorPrintRouter );
 
 
 app.get("*", (req, res, next) => {
