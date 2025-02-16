@@ -37,6 +37,7 @@ const { BacklitFlexPrintRouter } = require("./Route/Allproductsroute/Mediaprinti
 const { TranslitPrintRouter } = require("./Route/Allproductsroute/Mediaprinting/TranslitPrint");
 const { ThreeMReflectorPrintRouter } = require("./Route/Allproductsroute/Mediaprinting/3MReflectorPrint");
 const { GlassFilmPrintRouter } = require("./Route/Allproductsroute/Glassfilms/GlassFilmPrint");
+const { OneWayVisionRouter } = require("./Route/Allproductsroute/Glassfilms/Onewayvision");
 
 const {UserRouter}=require("./Route/Users")
 const {OrderRouter}=require("./Route/Order")
@@ -118,6 +119,7 @@ app.use("/api/v1/BacklitPrint",BacklitFlexPrintRouter );
 app.use("/api/v1/TranslitPrint",TranslitPrintRouter );
 app.use("/api/v1/3MReflectorPrint",ThreeMReflectorPrintRouter );
 app.use("/api/v1/Glassfilms",GlassFilmPrintRouter );
+app.use("/api/v1/OnewayvisionGlassfilms",OneWayVisionRouter );
 
 
 app.get("*", (req, res, next) => {
