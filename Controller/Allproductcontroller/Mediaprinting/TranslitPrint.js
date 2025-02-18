@@ -49,7 +49,7 @@ const CalculateTranslitPrintPrice = async (req, res, next) => {
   validateRequest(req, next);
 
   try {
-    const { type, height, width } = req.body;
+    const { type, height, width,applyDiscount  } = req.body;
 
     // Calculate square feet
     const sqft = height * width;
@@ -81,7 +81,11 @@ const CalculateTranslitPrintPrice = async (req, res, next) => {
     }
 
     // Calculate total price
-    const totalPrice = sizeOption.finalRate * sqft;
+    let totalPrice = sizeOption.finalRate * sqft;
+
+    if (applyDiscount) {
+      totalPrice = totalPrice - totalPrice * 0.10; // 10% discount
+  }
 
     res.status(200).json({
       status: true,

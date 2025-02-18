@@ -96,7 +96,7 @@ const CalculateCanvasPrintPrice = async (req, res, next) => {
     validateRequest(req, next);
   
     try {
-      const { type, height, width } = req.body;
+      const { type, height, width,applyDiscount } = req.body;
   
       // Calculate square footage (sqft) directly in feet
       const sqft = height * width;
@@ -128,8 +128,12 @@ const CalculateCanvasPrintPrice = async (req, res, next) => {
       }
   
       // ✅ Final Price Calculation
-      const totalPrice = sqft * sizeOption.finalRate; // Multiply sqft with final rate
-  
+      let totalPrice = sqft * sizeOption.finalRate; // Multiply sqft with final rate
+
+      if (applyDiscount) {
+        totalPrice = totalPrice - totalPrice * 0.10; // 10% discount
+      }
+
       res.status(200).json({
         status: true,
         data: { sqft, totalPrice },

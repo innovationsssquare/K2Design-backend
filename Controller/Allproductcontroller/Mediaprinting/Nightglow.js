@@ -35,7 +35,7 @@ const CreateNightGlowPrint = async (req, res, next) => {
 // Calculate Price
 const CalculateNightGlowPrintPrice = async (req, res, next) => {
   try {
-    const { rigidSurface, width, height, lamination } = req.body;
+    const { rigidSurface, width, height, lamination ,applyDiscount} = req.body;
     
     // Calculate total area
     const totalSqFt = width * height;
@@ -68,6 +68,10 @@ const CalculateNightGlowPrintPrice = async (req, res, next) => {
     // Calculate total price
     let totalPrice = totalSqFt * sizeRangeOption.finalRate;
 
+    if (applyDiscount) {
+      totalPrice = totalPrice - totalPrice * 0.10; // 10% discount
+    }
+
     // Add lamination if applied
     if (lamination) {
       totalPrice += totalSqFt * configuration.laminationCharge;
@@ -82,6 +86,7 @@ const CalculateNightGlowPrintPrice = async (req, res, next) => {
         finalRate: sizeRangeOption.finalRate,
         laminationCharge: lamination ? configuration.laminationCharge : 0,
         totalPrice,
+        applyDiscount:applyDiscount || false
       },
     });
   } catch (error) {

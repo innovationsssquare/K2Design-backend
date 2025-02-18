@@ -36,7 +36,7 @@ const CreateBacklitFlexPrint = async (req, res, next) => {
 // Calculate Backlit Flex Print Price
 const CalculateBacklitFlexPrintPrice = async (req, res, next) => {
   try {
-    const { type, height, width } = req.body;
+    const { type, height, width ,applyDiscount} = req.body;
 
     // Calculate square feet
     const sqft = height * width;
@@ -68,7 +68,11 @@ const CalculateBacklitFlexPrintPrice = async (req, res, next) => {
     }
 
     // Calculate total price
-    const totalPrice = sizeOption.finalRate * sqft;
+    let totalPrice = sizeOption.finalRate * sqft;
+
+    if (applyDiscount) {
+      totalPrice = totalPrice - totalPrice * 0.10; // 10% discount
+    }
 
     res.status(200).json({
       status: true,

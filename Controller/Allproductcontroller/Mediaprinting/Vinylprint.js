@@ -168,62 +168,122 @@ const DeleteVinylPrint = async (req, res, next) => {
 //   }
 // };
 
-const CalculateVinylPrintPrice = async (req, res, next) => {
-    try {
-      const { type, rigidSurface, height, width } = req.body;
+// const CalculateVinylPrintPrice = async (req, res, next) => {
+//     try {
+//       const { type, rigidSurface, height, width } = req.body;
   
+//       // Calculate total square footage
+//       const totalSqFt = height * width;
+  
+//       // Find the Vinyl Print configuration
+//       const vinylPrint = await VinylPrint.findOne({
+//         "configurations.type": type,
+//         "configurations.rigidSurface": rigidSurface,
+//       });
+  
+//       if (!vinylPrint) {
+//         return next(new AppErr("Vinyl Print with specified type and rigid surface not found", 404));
+//       }
+  
+//       // Find the correct size range for the given square footage
+//       const configuration = vinylPrint.configurations.find(
+//         (config) => config.type === type && config.rigidSurface === rigidSurface
+//       );
+  
+//       if (!configuration) {
+//         return next(new AppErr("Configuration for the given type and material not found", 404));
+//       }
+  
+//       const matchingRate = configuration.sizeRange.find(
+//         (range) => totalSqFt >= range.startSqFt && totalSqFt <= range.endSqFt
+//       );
+  
+//       if (!matchingRate) {
+//         return next(new AppErr("No pricing found for the given square footage", 400));
+//       }
+  
+//       // Calculate price
+//       const baseRate = matchingRate.baseRate;
+//       const extraRate = matchingRate.extraRate;
+//       const finalRate = matchingRate.finalRate;
+  
+//       const totalPrice = totalSqFt * finalRate; // Multiply by calculated sqft
+  
+//       res.status(200).json({
+//         status: true,
+//         data: {
+//           totalSqFt,
+//           baseRate,
+//           extraRate,
+//           finalRate,
+//           totalPrice,
+//         },
+//       });
+//     } catch (error) {
+//       next(new AppErr(error.message, 500));
+//     }
+//   };
+  
+const CalculateVinylPrintPrice = async (req, res, next) => {
+  try {
+      const { type, rigidSurface, height, width, applyDiscount } = req.body;
+
       // Calculate total square footage
       const totalSqFt = height * width;
-  
+
       // Find the Vinyl Print configuration
       const vinylPrint = await VinylPrint.findOne({
-        "configurations.type": type,
-        "configurations.rigidSurface": rigidSurface,
+          "configurations.type": type,
+          "configurations.rigidSurface": rigidSurface,
       });
-  
+
       if (!vinylPrint) {
-        return next(new AppErr("Vinyl Print with specified type and rigid surface not found", 404));
+          return next(new AppErr("Vinyl Print with specified type and rigid surface not found", 404));
       }
-  
+
       // Find the correct size range for the given square footage
       const configuration = vinylPrint.configurations.find(
-        (config) => config.type === type && config.rigidSurface === rigidSurface
+          (config) => config.type === type && config.rigidSurface === rigidSurface
       );
-  
+
       if (!configuration) {
-        return next(new AppErr("Configuration for the given type and material not found", 404));
+          return next(new AppErr("Configuration for the given type and material not found", 404));
       }
-  
+
       const matchingRate = configuration.sizeRange.find(
-        (range) => totalSqFt >= range.startSqFt && totalSqFt <= range.endSqFt
+          (range) => totalSqFt >= range.startSqFt && totalSqFt <= range.endSqFt
       );
-  
+
       if (!matchingRate) {
-        return next(new AppErr("No pricing found for the given square footage", 400));
+          return next(new AppErr("No pricing found for the given square footage", 400));
       }
-  
+
       // Calculate price
       const baseRate = matchingRate.baseRate;
       const extraRate = matchingRate.extraRate;
       const finalRate = matchingRate.finalRate;
-  
-      const totalPrice = totalSqFt * finalRate; // Multiply by calculated sqft
-  
+
+      let totalPrice = totalSqFt * finalRate; 
+
+      if (applyDiscount) {
+          totalPrice = totalPrice - totalPrice * 0.10; // 10% discount
+      }
+
       res.status(200).json({
-        status: true,
-        data: {
-          totalSqFt,
-          baseRate,
-          extraRate,
-          finalRate,
-          totalPrice,
-        },
+          status: true,
+          data: {
+              totalSqFt,
+              baseRate,
+              extraRate,
+              finalRate,
+              totalPrice,
+              discountApplied: applyDiscount || false,
+          },
       });
-    } catch (error) {
+  } catch (error) {
       next(new AppErr(error.message, 500));
-    }
-  };
-  
+  }
+};
 
 
 

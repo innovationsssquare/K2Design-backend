@@ -89,7 +89,7 @@ const CreateThreeMReflectorPrint = async (req, res, next) => {
 
 const CalculateThreeMReflectorPrintPrice = async (req, res, next) => {
     try {
-      const { type, height, width } = req.body;
+      const { type, height, width,applyDiscount } = req.body;
       
       // Calculate square footage
       const sqft = height * width;
@@ -123,6 +123,10 @@ const CalculateThreeMReflectorPrintPrice = async (req, res, next) => {
   
       let totalPrice = sizeOption.finalRate * sqft;
   
+      if (applyDiscount) {
+        totalPrice = totalPrice - totalPrice * 0.10; // 10% discount
+      }
+
       // If "ACP 3mm" is selected, find the corresponding rate and add it to the price
     //   const acpConfig = product.configurations.find((config) => config.type === "ACP 3mm");
       
