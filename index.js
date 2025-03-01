@@ -44,6 +44,7 @@ const { FlexBannerprePrintRouter } = require("./Route/Allproductsroute/Flexprint
 const { flexbannerrouter } = require("./Route/Allproductsroute/Flexprinting/Flexbannerprinting");
 const { FlexBannerWoodenFrameRouter } = require("./Route/Allproductsroute/Flexprinting/Flexbannerwood");
 const { FlexStandRouter } = require("./Route/Allproductsroute/Flexprinting/Flexstandprint");
+const { RollUpStandeeRouter } = require("./Route/Allproductsroute/Flexprinting/Flexrollupstand");
 
 const {UserRouter}=require("./Route/Users")
 const {OrderRouter}=require("./Route/Order")
@@ -132,6 +133,7 @@ app.use("/api/v1/Flexbannerpremium",FlexBannerprePrintRouter );
 app.use("/api/v1/Flexbannerprinting",flexbannerrouter );
 app.use("/api/v1/FlexBannerWooden",FlexBannerWoodenFrameRouter );
 app.use("/api/v1/FlexStand",FlexStandRouter );
+app.use("/api/v1/FlexrollupStand",RollUpStandeeRouter );
 
 
 app.get("*", (req, res, next) => {
