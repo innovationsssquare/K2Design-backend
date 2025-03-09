@@ -48,6 +48,8 @@ const { RollUpStandeeRouter } = require("./Route/Allproductsroute/Flexprinting/F
 const { AcpPlateRouter } = require("./Route/Allproductsroute/Rigidsignplates/EcosolventPrintACP");
 const {AcrylicPlateRouter } = require("./Route/Allproductsroute/Rigidsignplates/Acrylicplates");
 const {PvcfoamPlateRouter } = require("./Route/Allproductsroute/Rigidsignplates/Pvcfoamplates");
+const {NightglowPlateRouter } = require("./Route/Allproductsroute/Rigidsignplates/Nightglowplates");
+const {StainlessPlateRouter } = require("./Route/Allproductsroute/Rigidsignplates/Stainlesssteelplates");
 
 const {UserRouter}=require("./Route/Users")
 const {OrderRouter}=require("./Route/Order")
@@ -140,6 +142,8 @@ app.use("/api/v1/FlexrollupStand",RollUpStandeeRouter );
 app.use("/api/v1/AcpPlates",AcpPlateRouter );
 app.use("/api/v1/AcrylicPlates",AcrylicPlateRouter );
 app.use("/api/v1/PvcfoamPlates",PvcfoamPlateRouter );
+app.use("/api/v1/NightglowPlates",NightglowPlateRouter );
+app.use("/api/v1/StainlessPlates",StainlessPlateRouter );
 
 
 app.get("*", (req, res, next) => {
