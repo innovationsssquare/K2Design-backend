@@ -47,6 +47,7 @@ const { FlexStandRouter } = require("./Route/Allproductsroute/Flexprinting/Flexs
 const { RollUpStandeeRouter } = require("./Route/Allproductsroute/Flexprinting/Flexrollupstand");
 const { AcpPlateRouter } = require("./Route/Allproductsroute/Rigidsignplates/EcosolventPrintACP");
 const {AcrylicPlateRouter } = require("./Route/Allproductsroute/Rigidsignplates/Acrylicplates");
+const {PvcfoamPlateRouter } = require("./Route/Allproductsroute/Rigidsignplates/Pvcfoamplates");
 
 const {UserRouter}=require("./Route/Users")
 const {OrderRouter}=require("./Route/Order")
@@ -138,6 +139,7 @@ app.use("/api/v1/FlexStand",FlexStandRouter );
 app.use("/api/v1/FlexrollupStand",RollUpStandeeRouter );
 app.use("/api/v1/AcpPlates",AcpPlateRouter );
 app.use("/api/v1/AcrylicPlates",AcrylicPlateRouter );
+app.use("/api/v1/PvcfoamPlates",PvcfoamPlateRouter );
 
 
 app.get("*", (req, res, next) => {
