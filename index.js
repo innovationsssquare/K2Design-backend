@@ -50,6 +50,7 @@ const {AcrylicPlateRouter } = require("./Route/Allproductsroute/Rigidsignplates/
 const {PvcfoamPlateRouter } = require("./Route/Allproductsroute/Rigidsignplates/Pvcfoamplates");
 const {NightglowPlateRouter } = require("./Route/Allproductsroute/Rigidsignplates/Nightglowplates");
 const {StainlessPlateRouter } = require("./Route/Allproductsroute/Rigidsignplates/Stainlesssteelplates");
+const {VinylLettersNumbersRouter } = require("./Route/Allproductsroute/Vinylletters/Vinylletter");
 
 const {UserRouter}=require("./Route/Users")
 const {OrderRouter}=require("./Route/Order")
@@ -144,6 +145,7 @@ app.use("/api/v1/AcrylicPlates",AcrylicPlateRouter );
 app.use("/api/v1/PvcfoamPlates",PvcfoamPlateRouter );
 app.use("/api/v1/NightglowPlates",NightglowPlateRouter );
 app.use("/api/v1/StainlessPlates",StainlessPlateRouter );
+app.use("/api/v1/Vinylletter",VinylLettersNumbersRouter );
 
 
 app.get("*", (req, res, next) => {
