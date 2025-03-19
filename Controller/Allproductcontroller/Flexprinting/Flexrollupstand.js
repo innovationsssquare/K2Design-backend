@@ -150,7 +150,7 @@ const CalculateRollUpStandeePrice = async (req, res, next) => {
       // Select the flex price based on flexType
       let basePrice;
       switch (flexType) {
-        case "economy":
+        case "Economy":
           basePrice = configuration.pricing.economyFlexPrice;
           break;
         case "premium":
