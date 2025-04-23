@@ -52,6 +52,12 @@ const {NightglowPlateRouter } = require("./Route/Allproductsroute/Rigidsignplate
 const {StainlessPlateRouter } = require("./Route/Allproductsroute/Rigidsignplates/Stainlesssteelplates");
 const {VinylLettersNumbersRouter } = require("./Route/Allproductsroute/Vinylletters/Vinylletter");
 const { AcrylicLettersNumbersRouter} = require("./Route/Allproductsroute/Acrylicletters/Acrylicletters");
+const { ledLettersRouter} = require("./Route/Allproductsroute/LightboardLedboards/LEDLetters");
+const { ACPStencilLEDRouter} = require("./Route/Allproductsroute/LightboardLedboards/ACPStencilLEDRoutes");
+const { backlitFlexBoardRouter} = require("./Route/Allproductsroute/LightboardLedboards/backlitFlexBoard");
+const { FabricFramesRouter} = require("./Route/Allproductsroute/LightboardLedboards/FabricsTextileLED");
+const { LEDThinliteFrameRouter} = require("./Route/Allproductsroute/LightboardLedboards/LEDThinliteFrame");
+const { LightboxBoardRouter} = require("./Route/Allproductsroute/LightboardLedboards/LightboxBoard");
 
 const {UserRouter}=require("./Route/Users")
 const {OrderRouter}=require("./Route/Order")
@@ -148,6 +154,12 @@ app.use("/api/v1/NightglowPlates",NightglowPlateRouter );
 app.use("/api/v1/StainlessPlates",StainlessPlateRouter );
 app.use("/api/v1/Vinylletter",VinylLettersNumbersRouter );
 app.use("/api/v1/Acrylicletter",AcrylicLettersNumbersRouter );
+app.use("/api/v1/3Dletter",ledLettersRouter );
+app.use("/api/v1/ACPStencilLED",ACPStencilLEDRouter );
+app.use("/api/v1/Backlitflexboard",backlitFlexBoardRouter );
+app.use("/api/v1/FabricFrames",FabricFramesRouter );
+app.use("/api/v1/LEDThinliteFrame",LEDThinliteFrameRouter );
+app.use("/api/v1/LightboxBoard",LightboxBoardRouter );
 
 
 app.get("*", (req, res, next) => {
