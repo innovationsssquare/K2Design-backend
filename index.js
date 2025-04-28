@@ -58,6 +58,9 @@ const { backlitFlexBoardRouter} = require("./Route/Allproductsroute/LightboardLe
 const { FabricFramesRouter} = require("./Route/Allproductsroute/LightboardLedboards/FabricsTextileLED");
 const { LEDThinliteFrameRouter} = require("./Route/Allproductsroute/LightboardLedboards/LEDThinliteFrame");
 const { LightboxBoardRouter} = require("./Route/Allproductsroute/LightboardLedboards/LightboxBoard");
+const { ArtFrameRouter} = require("./Route/Allproductsroute/Modernproduct/ArtFrame");
+const { CurvSignRouter} = require("./Route/Allproductsroute/Modernproduct/CurvSign");
+const { FlatSignRouter} = require("./Route/Allproductsroute/Modernproduct/FlatSign");
 
 const {UserRouter}=require("./Route/Users")
 const {OrderRouter}=require("./Route/Order")
@@ -160,6 +163,9 @@ app.use("/api/v1/Backlitflexboard",backlitFlexBoardRouter );
 app.use("/api/v1/FabricFrames",FabricFramesRouter );
 app.use("/api/v1/LEDThinliteFrame",LEDThinliteFrameRouter );
 app.use("/api/v1/LightboxBoard",LightboxBoardRouter );
+app.use("/api/v1/Artframe",ArtFrameRouter );
+app.use("/api/v1/curvsign",CurvSignRouter );
+app.use("/api/v1/Flatsign",FlatSignRouter );
 
 
 app.get("*", (req, res, next) => {
