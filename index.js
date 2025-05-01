@@ -61,6 +61,9 @@ const { LightboxBoardRouter} = require("./Route/Allproductsroute/LightboardLedbo
 const { ArtFrameRouter} = require("./Route/Allproductsroute/Modernproduct/ArtFrame");
 const { CurvSignRouter} = require("./Route/Allproductsroute/Modernproduct/CurvSign");
 const { FlatSignRouter} = require("./Route/Allproductsroute/Modernproduct/FlatSign");
+const { ISignWallMountedRouter} = require("./Route/Allproductsroute/Modernproduct/iSign");
+const { OptiFrameRouter} = require("./Route/Allproductsroute/Modernproduct/OptiFrame");
+const { TableStandRouter} = require("./Route/Allproductsroute/Modernproduct/TableStand");
 
 const {UserRouter}=require("./Route/Users")
 const {OrderRouter}=require("./Route/Order")
@@ -166,6 +169,9 @@ app.use("/api/v1/LightboxBoard",LightboxBoardRouter );
 app.use("/api/v1/Artframe",ArtFrameRouter );
 app.use("/api/v1/curvsign",CurvSignRouter );
 app.use("/api/v1/Flatsign",FlatSignRouter );
+app.use("/api/v1/Isign",ISignWallMountedRouter );
+app.use("/api/v1/Optiframe",OptiFrameRouter );
+app.use("/api/v1/Tablestand",TableStandRouter );
 
 
 app.get("*", (req, res, next) => {
