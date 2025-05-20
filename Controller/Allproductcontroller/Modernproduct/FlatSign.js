@@ -4,14 +4,22 @@ const AppErr = require("../../../Services/AppErr");
 // Create
 const CreateFlatSign = async (req, res, next) => {
   try {
-    const { name, categoryId, sku, description, images, configurations } = req.body;
+    const { name, categoryId, sku, description, images, configurations } =
+      req.body;
 
     const existingProduct = await FlatSign.findOne({ sku });
     if (existingProduct) {
       return next(new AppErr("Product with this SKU already exists", 400));
     }
 
-    const newProduct = new FlatSign({ name, categoryId, sku, description, images, configurations });
+    const newProduct = new FlatSign({
+      name,
+      categoryId,
+      sku,
+      description,
+      images,
+      configurations,
+    });
     await newProduct.save();
 
     res.status(201).json({
@@ -25,19 +33,111 @@ const CreateFlatSign = async (req, res, next) => {
 };
 
 // Calculate Price
+// const CalculateFlatSignPrice = async (req, res, next) => {
+//   try {
+//     const { mainType, widthMM, heightMM ,qty} = req.body;
+//      console.log(req.body)
+//     const product = await FlatSign.findOne({ "configurations.mainType": mainType });
+//     if (!product) {
+//       return next(new AppErr("Product with specified type not found", 404));
+//     }
+
+//     const configuration = product.configurations.find((config) => config.mainType === mainType);
+
+//     if (!configuration) {
+//       return next(new AppErr("Configuration for the specified type not found", 404));
+//     }
+
+//     console.log(configuration)
+
+//     const sizeOption = configuration.frameSizes.find(
+//       (frame) => frame.widthMM === widthMM && frame.heightMM === heightMM
+//     );
+
+//     if (!sizeOption) {
+//       return next(new AppErr("Invalid size selected", 400));
+//     }
+
+//     const pricePerUnit = sizeOption.customerCostWithPrint;
+//     const quantity = qty || 1;
+//     const totalPrice = pricePerUnit * quantity;
+
+//     res.status(200).json({
+//       status: true,
+//       data: { widthMM, heightMM, totalPrice },
+//     });
+//   } catch (error) {
+//     next(new AppErr(error.message, 500));
+//   }
+// };
+
+// const CalculateFlatSignPrice = async (req, res, next) => {
+//   try {
+//     const { mainType, profileType, widthMM, heightMM, qty } = req.body;
+
+//     const product = await FlatSign.findOne({
+//       "configurations.mainType": mainType,
+//       "configurations.profileType": profileType,
+//     });
+
+//     if (!product) {
+//       return next(new AppErr("Product with specified type/profile not found", 404));
+//     }
+
+//     const configuration = product.configurations.find(
+//       (config) => config.mainType === mainType && config.profileType === profileType
+//     );
+
+//     if (!configuration) {
+//       return next(new AppErr("Matching configuration not found", 404));
+//     }
+
+//     const sizeOption = configuration.frameSizes.find(
+//       (frame) => frame.widthMM === widthMM && frame.heightMM === heightMM
+//     );
+
+//     if (!sizeOption) {
+//       return next(new AppErr("Invalid size selected", 400));
+//     }
+
+//     const quantity = qty || 1;
+//     const totalPrice = sizeOption.customerCostWithPrint * quantity;
+
+//     res.status(200).json({
+//       status: true,
+//       data: {
+//         quantity,
+//         totalPrice,
+//       },
+//     });
+//   } catch (error) {
+//     next(new AppErr(error.message, 500));
+//   }
+// };
+
 const CalculateFlatSignPrice = async (req, res, next) => {
   try {
-    const { mainType, widthMM, heightMM ,qty} = req.body;
+    const { mainType, widthMM, heightMM, qty } = req.body;
 
-    const product = await FlatSign.findOne({ "configurations.mainType": mainType });
+    const product = await FlatSign.findOne({
+      "configurations.mainType": mainType,
+    });
+
     if (!product) {
-      return next(new AppErr("Product with specified type not found", 404));
+      return next(new AppErr("Product with specified mainType not found", 404));
     }
 
-    const configuration = product.configurations.find((config) => config.mainType === mainType);
+    // Find configuration by mainType that contains the frame size
+    const configuration = product.configurations.find(
+      (config) =>
+        config.mainType === mainType &&
+        config.frameSizes.some(
+          (frame) => frame.widthMM === widthMM && frame.heightMM === heightMM
+        )
+    );
 
     if (!configuration) {
-      return next(new AppErr("Configuration for the specified type not found", 404));
+      return next(new AppErr("No configuration found for selected size", 404));
     }
 
     const sizeOption = configuration.frameSizes.find(
@@ -45,16 +145,20 @@ const CalculateFlatSignPrice = async (req, res, next) => {
     );
 
     if (!sizeOption) {
-      return next(new AppErr("Invalid size selected", 400));
+      return next(
+        new AppErr("Frame size not found in selected configuration", 400)
+      );
     }
 
-    const pricePerUnit = sizeOption.customerCostWithPrint;
     const quantity = qty || 1;
-    const totalPrice = pricePerUnit * quantity;
+    const totalPrice = sizeOption.customerCostWithPrint * quantity;
 
     res.status(200).json({
       status: true,
-      data: { widthMM, heightMM, totalPrice },
+      data: {
+        quantity,
+        totalPrice,
+      },
     });
   } catch (error) {
     next(new AppErr(error.message, 500));
