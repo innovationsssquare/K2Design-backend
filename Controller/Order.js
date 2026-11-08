@@ -16,59 +16,74 @@ const createOrder = async (req, res, next) => {
     const { products, admin, branch, status, details, user } = req.body;
     
     const generateOrderId = () => {
-      const timestamp = Date.now(); // Current time in milliseconds
-      const randomNum = Math.floor(Math.random() * 1000000); // A random 6-digit number
+      const timestamp = Date.now();
+      const randomNum = Math.floor(1000 + Math.random() * 9000);
       return `#ORD-${timestamp}-${randomNum}`;
     };
 
     const orderId = generateOrderId();
 
+    // Check if user is an ObjectId or customer details object
+    const isMongoId = (id) => typeof id === 'string' && id.match(/^[0-9a-fA-F]{24}$/);
 
-    // Create the new order
     const newOrder = new OrderModel({
       orderId,
-      products,
-      admin,
-      branch,
-      status,
-      details,
-      user,
+      products: products || [],
+      admin: isMongoId(admin) ? admin : undefined,
+      branch: isMongoId(branch) ? branch : undefined,
+      status: status || "pending",
+      details: details || {},
+      user: isMongoId(user) ? user : undefined,
+      customerDetails: typeof user === 'object' && !isMongoId(user) ? user : {
+        UserName: user?.UserName,
+        UserNumber: user?.UserNumber,
+        Email: user?.Email,
+        Address: user?.Address
+      },
       isRead: false,
     });
 
     const savedOrder = await newOrder.save();
 
-    // Generate the invoice as a PDF
-    const pdfBuffer = await generateInvoicePDF(savedOrder);
+    // Attempt invoice PDF generation & Cloudinary upload (safe execution)
+    try {
+      const pdfBuffer = await generateInvoicePDF(savedOrder);
+      if (pdfBuffer && process.env.CLOUD_NAME) {
+        const uploadResponse = await new Promise((resolve, reject) => {
+          cloudinary.uploader.upload_stream(
+            {
+              folder: "invoices",
+              resource_type: "raw",
+              format: "pdf",
+            },
+            (error, result) => {
+              if (error) return resolve(null);
+              resolve(result);
+            }
+          ).end(pdfBuffer);
+        });
 
-    // Upload the PDF to Cloudinary
-    const uploadResponse = await new Promise((resolve, reject) => {
-      cloudinary.uploader.upload_stream(
-        {
-          folder: "invoices",
-          resource_type: "raw",
-          format: "pdf",
-        },
-        (error, result) => {
-          if (error) {
-            console.error("Cloudinary Upload Error:", error);
-            return reject(new AppErr("Failed to upload invoice to Cloudinary", 500));
-          }
-          resolve(result);
+        if (uploadResponse?.secure_url) {
+          savedOrder.invoiceUrl = uploadResponse.secure_url;
+          await savedOrder.save();
         }
-      ).end(pdfBuffer);
-    });
+      }
+    } catch (pdfErr) {
+      console.warn("Invoice PDF generation/upload deferred:", pdfErr.message);
+    }
 
-    // Save the Cloudinary URL to the order for reference
-    savedOrder.invoiceUrl = uploadResponse.secure_url;
-    await savedOrder.save();
-
-    // Emit order creation event via Socket.IO (if using)
-    const io = getSocketIO();
-    io.emit("orderCreated", {
-      message: "A new order has been created!",
-      order: savedOrder
-    });
+    // Emit order creation event via Socket.IO
+    try {
+      const io = getSocketIO();
+      if (io) {
+        io.emit("orderCreated", {
+          message: "A new order has been created!",
+          order: savedOrder
+        });
+      }
+    } catch (ioErr) {
+      console.warn("Socket.io emit warning:", ioErr.message);
+    }
 
     // Respond with the created order
     res.status(201).json({
@@ -284,15 +299,30 @@ const getOrderById = async (req, res, next) => {
 const updateOrderById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { products, status, details } = req.body;
+    const { products, status, details, branch } = req.body;
+
+    const updateData = {};
+    if (products !== undefined) updateData.products = products;
+    if (status !== undefined) updateData.status = status;
+    if (details !== undefined) updateData.details = details;
+    if (branch !== undefined) updateData.branch = branch;
 
     const updatedOrder = await OrderModel.findByIdAndUpdate(
       id,
-      { products, status, details },
+      updateData,
       { new: true }
-    );
+    )
+      .populate("user")
+      .populate("products")
+      .populate("admin")
+      .populate("branch");
 
     if (!updatedOrder) return next(new AppErr("Order not found", 404));
+
+    // Emit socket notification if io is attached
+    if (req.io) {
+      req.io.emit("orderStatusUpdated", updatedOrder);
+    }
 
     res.status(200).json(updatedOrder);
   } catch (error) {

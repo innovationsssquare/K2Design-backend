@@ -21,20 +21,14 @@ const IsSuperOrAdmin = async (req, res, next) => {
       return next(new AppErr("Super Admin Or Admin not found", 404));
     }
 
-    if (!superadmin) {
-      return next(new AppErr("You Dont't Have Permission", 404));
-    }
-
-    if (!admin) {
-      return next(new AppErr("You Dont't Have Permission", 404));
-    }
-
     if (superadmin) {
       req.role = "owner";
       req.user = superadmin._id;
-    } else {
+    } else if (admin) {
       req.role = "admin";
       req.user = admin._id;
+    } else {
+      return next(new AppErr("You Don't Have Permission", 403));
     }
 
     next();

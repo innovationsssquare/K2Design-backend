@@ -72,6 +72,7 @@ const { Server }= require("socket.io");
 const {initSocket}=require("./Services/Socket")
 const { TeamRouter } = require("./Route/Team");
 const { TicketRouter } = require("./Route/Support");
+const { PricingRouter } = require("./Route/Pricing");
 DbConnection();
 
 const app = express();
@@ -111,6 +112,7 @@ app.use(bodyParser.json());
 
 
 //--------------- Route Middleware ------------------//
+app.use("/api/v1/pricing", PricingRouter);
 app.use("/api/v1/SuperAdmin", SuperAdminRouter);
 app.use("/api/v1/admin", AdminRouter);
 app.use("/api/v1/users", UserRouter);

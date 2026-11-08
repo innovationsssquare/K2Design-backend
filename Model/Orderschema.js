@@ -2,12 +2,21 @@ const mongoose = require("mongoose");
 
 const OrderSchema = new mongoose.Schema(
   {
+    orderId: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     products: [
       {
         product: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'Product',
-          required: true,
+          required: false,
+        },
+        productName: {
+          type: String,
+          default: "Custom Print Product"
         },
         quantity: {
           type: Number,
@@ -20,16 +29,9 @@ const OrderSchema = new mongoose.Schema(
         },
         variants: [
           {
-            type: {
-              type: String,
-            },
-            value: {
-              type: String,
-            },
-            priceAdjustment: {
-              type: Number,
-              default: 0,
-            },
+            type: { type: String },
+            value: { type: String },
+            priceAdjustment: { type: Number, default: 0 },
           },
         ],
         rates: {
@@ -47,31 +49,39 @@ const OrderSchema = new mongoose.Schema(
     admin: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Admin',
-      required: true,
+      required: false,
     },
     branch: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Branch',
-      required: true,
+      required: false,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Customer', 
-      required: true,
+      ref: 'Customer',
+      required: false,
+    },
+    customerDetails: {
+      UserName: { type: String },
+      UserNumber: { type: String },
+      Email: { type: String },
+      Address: { type: String }
+    },
+    details: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {}
     },
     invoiceUrl: {
-      type: String, 
-    },
-    orderId: {
-      type: String, 
+      type: String,
+      default: ""
     },
     isRead: {
       type: Boolean,
-      default: false, 
+      default: false,
     },
     status: {
       type: String,
-      enum: ['pending', 'completed', 'canceled'],
+      enum: ['pending', 'design_review', 'printing', 'ready_for_pickup', 'completed', 'canceled'],
       default: 'pending',
     },
   },
